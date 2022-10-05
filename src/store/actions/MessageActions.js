@@ -1,8 +1,8 @@
 import { getMessages, signup, login } from "../../services/MessageServicves";
 import { GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN } from "../types";
 
-export const loadMessages = (userId) =>{
-    return async (dispatch) =>{
+export const loadMessages = (userId) => {
+    return async (dispatch) => {
         try{
             const messages = await getMessages(userId)
             dispatch({
@@ -14,8 +14,8 @@ export const loadMessages = (userId) =>{
         }
     }
 } 
-export const loadSignup = (name, password) =>{
-    return async (dispatch) =>{
+export const loadSignup = (name, password) => {
+    return async (dispatch) => {
         try{
             const response = await signup(name,password)
             console.log(response)
@@ -23,36 +23,36 @@ export const loadSignup = (name, password) =>{
                 type:SIGNUP,
                 payload:response
             })
-        }catch (error){
+        }catch(error){
             throw error
         }
     }
 }
-export const loadSetDisplayMessage = (message) =>{
-    return async (dispatch) =>{
+export const loadSetDisplayMessage = (message) => {
+    return async (dispatch) => {
         try{
             dispatch({
                 type:SET_DISPLAY_MESSAGE,
                 payload:message
             })
-        }catch (error){
+        }catch(error){
             throw error
         }
     }
 }
-export const loadLogout = () =>{
-    return async (dispatch) =>{
+export const loadLogout = () => {
+    return async (dispatch) => {
         try{
             dispatch({
                 type:LOGOUT,
             })
-        }catch (error){
+        }catch(error){
             throw error
         }
     }
 }
-export const loadLogin = (name, password) =>{
-    return async (dispatch) =>{
+export const loadLogin = (name, password) => {
+    return async (dispatch) => {
         try{
             const response = await login(name,password)
             console.log(response)
@@ -60,7 +60,7 @@ export const loadLogin = (name, password) =>{
                 type:LOGIN,
                 payload:response
             })
-        }catch (error){
+        }catch(error){
             throw error
         }
     }

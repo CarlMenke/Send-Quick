@@ -1,10 +1,10 @@
-import './styles/App.css';
-import React from 'react';
-import { connect } from 'react-redux';
-import {Route, Routes, redirect, Navigate} from 'react-router-dom'
-import Nav from './components/Nav';
-import Conversations from './components/Conversations';
-import Home from './components/Home';
+import './styles/App.css'
+import React from 'react'
+import { connect } from 'react-redux'
+import { Route, Routes, Navigate } from 'react-router-dom'
+import Nav from './components/Nav'
+import Conversations from './components/Conversations'
+import Home from './components/Home'
 
 const mapStatetoProps = ({ state }) =>{
   return { state }
@@ -27,9 +27,7 @@ function App(props){
             <Conversations />
           ) : (
             <Navigate replace to = '/'/>
-          )
-          }
-          />
+          )}/>
       </Routes>
     </div>
   );

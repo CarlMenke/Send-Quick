@@ -1,9 +1,6 @@
-import { useEffect } from "react"
-import { Redirect, Route } from 'react-router-dom'
 import React from 'react'
 import { connect } from "react-redux"
 import { loadMessages } from "../store/actions/MessageActions"
-
 
 const mapStatetoProps = ({ state }) =>{
    return { state }
@@ -16,11 +13,6 @@ const mapDispatchToProps = (dispatch) =>{
 }
 
 const Conversations = (props) =>{
-
-   // useEffect(()=>{
-   //    props.fetchMessageByUser(props.messageState.loggedUser.id)
-   // },[])
-
    return(
       <div>
          <div>Conversations</div> 

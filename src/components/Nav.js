@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom"
 import LoginAndSignup from "./LoginAndSignup"
 
-const Nav = () =>{
+const Nav = () => {
     return(
         <div className="row-nowrap-sb">
             <div>
@@ -9,7 +9,6 @@ const Nav = () =>{
                 <Link to="/conversations">Your Conversations</Link>
             </div>
             <LoginAndSignup/>
-
         </div>
     )
 }
