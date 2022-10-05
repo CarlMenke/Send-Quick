@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react"
 import { connect } from "react-redux"
-import { loadSignup , loadSetDisplayMessage, loadLogout} from "../store/actions/MessageActions"
+import { loadSignup , loadSetDisplayMessage, loadLogout, loadLogin} from "../store/actions/MessageActions"
 
 const mapStatetoProps = ({ state }) =>{
     return { state }
@@ -9,6 +9,7 @@ const mapStatetoProps = ({ state }) =>{
  const mapDispatchToProps = (dispatch) =>{
     return{
         fetchSignup: (name,password) => dispatch(loadSignup(name,password)),
+        fetchLogin: (name,password) => dispatch(loadLogin(name,password)),
         fetchSetDisplayMessage: (message) => dispatch(loadSetDisplayMessage(message)),
         fetchLogout: () => dispatch(loadLogout())
     }
@@ -38,8 +39,12 @@ useEffect (()=>{
                             <input onChange={(e)=>{setName(e.target.value)}} placeholder="Name..."/>
                             <input onChange={(e)=>{setPassword(e.target.value)}} placeholder="Password..."/>
                             <div>
-                                <button type = 'click'>Login</button>
-                                <button type = 'click' onClick = {async ()=>{
+                                <button type = 'click' onClick = {
+                                    async ()=>{
+                                    await props.fetchLogin(name,password)
+                                    }}>Login</button>
+                                <button type = 'click' onClick = {
+                                    async ()=>{
                                     await props.fetchSignup(name,password)
                                     }}>
                                     Sign up

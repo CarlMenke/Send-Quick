@@ -12,6 +12,18 @@ export const getMessages = async (page) => {
 export const signup = async (name,password) =>{
   try {
     const res = await client.post('users/signup',{name:name, password:password})
+    localStorage.setItem('token', res.data.token)
+    console.log(res.data)
+    return res.data
+  }catch (error){
+    throw error
+  }
+}
+
+export const login = async (name,password) =>{
+  try {
+    const res = await client.post('users/login',{name:name, password:password})
+    localStorage.setItem('token', res.data.token)
     console.log(res.data)
     return res.data
   }catch (error){

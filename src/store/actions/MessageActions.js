@@ -1,5 +1,5 @@
-import { getMessages, signup } from "../../services/MessageServicves";
-import { GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT } from "../types";
+import { getMessages, signup, login } from "../../services/MessageServicves";
+import { GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN } from "../types";
 
 export const loadMessages = (userId) =>{
     return async (dispatch) =>{
@@ -28,8 +28,6 @@ export const loadSignup = (name, password) =>{
         }
     }
 }
-
-
 export const loadSetDisplayMessage = (message) =>{
     return async (dispatch) =>{
         try{
@@ -42,12 +40,25 @@ export const loadSetDisplayMessage = (message) =>{
         }
     }
 }
-
 export const loadLogout = () =>{
     return async (dispatch) =>{
         try{
             dispatch({
                 type:LOGOUT,
+            })
+        }catch (error){
+            throw error
+        }
+    }
+}
+export const loadLogin = (name, password) =>{
+    return async (dispatch) =>{
+        try{
+            const response = await login(name,password)
+            console.log(response)
+            dispatch({
+                type:LOGIN,
+                payload:response
             })
         }catch (error){
             throw error
