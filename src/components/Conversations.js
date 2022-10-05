@@ -3,8 +3,8 @@ import { connect } from "react-redux"
 import { loadMessages } from "../store/actions/MessageActions"
 
 
-const mapStatetoProps = ({ messageState }) =>{
-   return { messageState }
+const mapStatetoProps = ({ state }) =>{
+   return { state }
 }
 
 const mapDispatchToProps = (dispatch) =>{
@@ -15,9 +15,9 @@ const mapDispatchToProps = (dispatch) =>{
 
 const Conversations = (props) =>{
 
-   useEffect(()=>{
-      props.fetchMessageByUser(props.messageState.loggedUser.id)
-   },[])
+   // useEffect(()=>{
+   //    props.fetchMessageByUser(props.messageState.loggedUser.id)
+   // },[])
 
    return(
       <div>
