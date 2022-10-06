@@ -1,5 +1,5 @@
-import { getMessages, signup, login } from "../../services/MessageServicves";
-import { GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN } from "../types";
+import { getUpdateSocketId, getMessages, signup, login, getSocketFromName } from "../../services/MessageServicves";
+import { SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME } from "../types";
 
 export const loadMessages = (userId) => {
     return async (dispatch) => {
@@ -14,6 +14,20 @@ export const loadMessages = (userId) => {
         }
     }
 } 
+export const loadUpdateSocketId = (name,socket) => {
+    return async (dispatch) => {
+        try{
+            const response = await getUpdateSocketId(name,socket)
+            console.log(response)
+            dispatch({
+                type:UPDATE_SOCKET_ID,
+                payload:response
+            })
+        }catch (error){
+            throw error
+        }
+    }
+} 
 export const loadSignup = (name, password) => {
     return async (dispatch) => {
         try{
@@ -21,6 +35,20 @@ export const loadSignup = (name, password) => {
             console.log(response)
             dispatch({
                 type:SIGNUP,
+                payload:response
+            })
+        }catch(error){
+            throw error
+        }
+    }
+}
+export const loadLogin = (name, password) => {
+    return async (dispatch) => {
+        try{
+            const response = await login(name,password)
+            console.log(response)
+            dispatch({
+                type:LOGIN,
                 payload:response
             })
         }catch(error){
@@ -51,13 +79,13 @@ export const loadLogout = () => {
         }
     }
 }
-export const loadLogin = (name, password) => {
+export const loadSocketFromName = (name) => {
     return async (dispatch) => {
         try{
-            const response = await login(name,password)
+            const response = await getSocketFromName(name)
             console.log(response)
             dispatch({
-                type:LOGIN,
+                type:GET_SOCKET_FROM_NAME,
                 payload:response
             })
         }catch(error){
@@ -65,4 +93,17 @@ export const loadLogin = (name, password) => {
         }
     }
 }
+export const loadSetSocket = (socket) => {
+    return async (dispatch) => {
+        try{
+            dispatch({
+                type:SET_SOCKET,
+                payload:socket
+            })
+        }catch(error){
+            throw error
+        }
+    }   
+}
+
 

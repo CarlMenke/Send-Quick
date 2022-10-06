@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react"
 import { connect } from "react-redux"
-import { loadSignup , loadSetDisplayMessage, loadLogout, loadLogin} from "../store/actions/MessageActions"
+import { loadSetSocket, loadSignup , loadSetDisplayMessage, loadLogout, loadLogin, loadUpdateSocketId} from "../store/actions/MessageActions"
+import io from 'socket.io-client'
 
 const mapStatetoProps = ({state}) => {
     return {state}
@@ -10,8 +11,10 @@ const mapDispatchToProps = (dispatch) => {
     return{
         fetchSignup:(name,password) => dispatch(loadSignup(name,password)),
         fetchLogin:(name,password) => dispatch(loadLogin(name,password)),
+        fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
         fetchSetDisplayMessage:(message) => dispatch(loadSetDisplayMessage(message)),
-        fetchLogout:() => dispatch(loadLogout())
+        fetchLogout:() => dispatch(loadLogout()),
+        fetchSetSocket:(socket) =>dispatch(loadSetSocket(socket))
     }
 }
 
@@ -23,6 +26,14 @@ const LoginAndSignup = (props) => {
     useEffect (() => {
         if(props.state.logged){
             setHovered(false)
+            const socketHelper = async () => {
+                const socket = await io.connect("http://localhost:3002")
+                await socket.on("connect", () =>{
+                   props.fetchUpdateUserSocket(props.state.loggedUser.name,socket.id)
+                   props.fetchSetSocket(socket)
+                })
+            }
+            socketHelper()
         }
     },[props.state.logged])
 
