@@ -8,7 +8,7 @@ const initialState = {
     socket:null
 }
 
-const MessageReducer = (state = initialState, action) => {
+const MessageReducer = async (state = initialState, action) => {
     switch (action.type){
         case GET_MESSAGES:
             return { ...state }

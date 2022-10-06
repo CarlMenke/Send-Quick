@@ -5,7 +5,7 @@ export const loadMessages = (userId) => {
     return async (dispatch) => {
         try{
             const messages = await getMessages(userId)
-            dispatch({
+            await dispatch({
                 type:GET_MESSAGES,
                 payload:messages
             })
@@ -18,8 +18,7 @@ export const loadUpdateSocketId = (name,socket) => {
     return async (dispatch) => {
         try{
             const response = await getUpdateSocketId(name,socket)
-            console.log(response)
-            dispatch({
+            await dispatch({
                 type:UPDATE_SOCKET_ID,
                 payload:response
             })
@@ -32,8 +31,7 @@ export const loadSignup = (name, password) => {
     return async (dispatch) => {
         try{
             const response = await signup(name,password)
-            console.log(response)
-            dispatch({
+            await dispatch({
                 type:SIGNUP,
                 payload:response
             })
@@ -46,8 +44,7 @@ export const loadLogin = (name, password) => {
     return async (dispatch) => {
         try{
             const response = await login(name,password)
-            console.log(response)
-            dispatch({
+            await dispatch({
                 type:LOGIN,
                 payload:response
             })
@@ -59,7 +56,7 @@ export const loadLogin = (name, password) => {
 export const loadSetDisplayMessage = (message) => {
     return async (dispatch) => {
         try{
-            dispatch({
+            await dispatch({
                 type:SET_DISPLAY_MESSAGE,
                 payload:message
             })
@@ -71,7 +68,7 @@ export const loadSetDisplayMessage = (message) => {
 export const loadLogout = () => {
     return async (dispatch) => {
         try{
-            dispatch({
+            await dispatch({
                 type:LOGOUT,
             })
         }catch(error){
@@ -83,8 +80,7 @@ export const loadSocketFromName = (name) => {
     return async (dispatch) => {
         try{
             const response = await getSocketFromName(name)
-            console.log(response)
-            dispatch({
+            await dispatch({
                 type:GET_SOCKET_FROM_NAME,
                 payload:response
             })
@@ -96,7 +92,7 @@ export const loadSocketFromName = (name) => {
 export const loadSetSocket = (socket) => {
     return async (dispatch) => {
         try{
-            dispatch({
+            await dispatch({
                 type:SET_SOCKET,
                 payload:socket
             })

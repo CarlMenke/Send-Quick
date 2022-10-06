@@ -31,12 +31,13 @@ const Conversations = (props) =>{
    const sendPrivateMessage = async (e) =>{
       e.preventDefault()
       await props.fetchSocketFromName(currentRecipient)
-
       const data = {
          message:currentMessage,
          recipientId:props.state.currentRecipientSocket
       }
+      console.log('data in sendprivatemessage', data)
       socket.emit("send private message",data)
+
    }
 
    return(
