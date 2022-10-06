@@ -47,3 +47,10 @@
   justify-content: space-between;
   padding:5%;
 }
+.row-nowrap{
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: center;
+  padding:1%;
+  margin:1%;
+}

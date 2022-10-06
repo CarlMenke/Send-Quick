@@ -1,5 +1,5 @@
-import { getUpdateSocketId, getMessages, signup, login, getSocketFromName } from "../../services/MessageServicves";
-import { SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME } from "../types";
+import { getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
+import { GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST } from "../types";
 
 export const loadMessages = (userId) => {
     return async (dispatch) => {
@@ -95,6 +95,33 @@ export const loadSetSocket = (socket) => {
             await dispatch({
                 type:SET_SOCKET,
                 payload:socket
+            })
+        }catch(error){
+            throw error
+        }
+    }   
+}
+export const loadSendFriendRequest = (senderId, recieverName) => {
+    return async (dispatch) => {
+        try{
+            const response = await getSendFriendRequest(senderId, recieverName)
+            await dispatch({
+                type:SEND_FRIEND_REQUEST,
+                payload:response
+            })
+        }catch(error){
+            throw error
+        }
+    }   
+}
+export const loadUserDetails = (userId) => {
+    return async (dispatch) => {
+        try{
+            const response = await getUserDetails(userId)
+            console.log('inside actions', response)
+            await dispatch({
+                type:GET_USER_DETAILS,
+                payload:response
             })
         }catch(error){
             throw error

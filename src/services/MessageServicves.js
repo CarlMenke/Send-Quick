@@ -45,4 +45,22 @@ export const getSocketFromName = async (name) =>{
     throw error
   }
 }
+export const getSendFriendRequest = async (senderId, recieverName) => {
+  try{
+    const res = await client.post('users/friendrequest',{senderId:senderId,recieverName:recieverName})
+    console.log(res)
+    return res.data
+  }catch(error){
+    throw error
+  }
+}
+export const getUserDetails = async (userId) =>{
+  try{
+    const res = await client.post('users/details',{userId:userId})
+    console.log(res)
+    return res.data
+  }catch(error){
+    throw error
+  }
+}
 

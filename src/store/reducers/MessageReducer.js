@@ -1,4 +1,4 @@
-import { GET_MESSAGES, SET_DISPLAY_MESSAGE, SIGNUP,LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SET_SOCKET } from "../types";
+import { GET_USER_DETAILS, GET_MESSAGES, SET_DISPLAY_MESSAGE, SIGNUP,LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SET_SOCKET } from "../types";
 
 const initialState = {
     logged:false,
@@ -8,7 +8,7 @@ const initialState = {
     socket:null
 }
 
-const MessageReducer = async (state = initialState, action) => {
+const MessageReducer = (state = initialState, action) => {
     switch (action.type){
         case GET_MESSAGES:
             return { ...state }
@@ -26,6 +26,8 @@ const MessageReducer = async (state = initialState, action) => {
             return { ...state, currentRecipientSocket:action.payload}
         case SET_SOCKET:
             return { ...state, socket:action.payload}
+        case GET_USER_DETAILS:
+            return { ...state, loggedUser:action.payload}
         default: 
             return { ...state}
     }

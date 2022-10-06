@@ -36,7 +36,7 @@ const LoginAndSignup = (props) => {
             socketHelper()
         }
     },[props.state.logged])
-
+    
     if(!props.state.logged){
         if(hovered){
             return(
