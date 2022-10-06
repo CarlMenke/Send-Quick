@@ -53,7 +53,9 @@ const LoginAndSignup = (props) => {
                             <button type = 'click' 
                                 onClick = {
                                     async () => {
-                                    await props.fetchLogin(name,password)
+                                        if(name !== '' && password !== ''){
+                                            await props.fetchLogin(name,password)
+                                        }
                                 }}>
                                 Login
                             </button>

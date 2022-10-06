@@ -9,7 +9,7 @@ export const getMessages = async (page) => {
   }
 }
 
-export const getUpdateSocketId = async (name,socket) =>{
+export const getUpdateSocketId = async (name,socket) => {
   try{
     const res = await client.put('users/update/socket/id',{name:name, socket:socket})
     return res.data
@@ -18,7 +18,7 @@ export const getUpdateSocketId = async (name,socket) =>{
   }
 }
 
-export const signup = async (name, password) =>{
+export const signup = async (name, password) => {
   try{
     const res = await client.post('users/signup',{name:name, password:password})
     localStorage.setItem('token', res.data.token)
@@ -28,7 +28,7 @@ export const signup = async (name, password) =>{
   }
 }
 
-export const login = async (name, password) =>{
+export const login = async (name, password) => {
   try{
     const res = await client.post('users/login',{name:name, password:password})
     localStorage.setItem('token', res.data.token)
@@ -37,9 +37,17 @@ export const login = async (name, password) =>{
     throw error
   }
 }
-export const getSocketFromName = async (name) =>{
+export const getSocketFromName = async (name) => {
   try{
     const res = await client.post('users/getsocket',{name:name})
+    return res.data
+  }catch(error){
+    throw error
+  }
+}
+export const getUserDetails = async (userId) => {
+  try{
+    const res = await client.post('users/details',{userId:userId})
     return res.data
   }catch(error){
     throw error
@@ -48,16 +56,14 @@ export const getSocketFromName = async (name) =>{
 export const getSendFriendRequest = async (senderId, recieverName) => {
   try{
     const res = await client.post('users/friendrequest',{senderId:senderId,recieverName:recieverName})
-    console.log(res)
     return res.data
   }catch(error){
     throw error
   }
 }
-export const getUserDetails = async (userId) =>{
+export const getFriendRequestResponse = async (userId, friendId, choice) => {
   try{
-    const res = await client.post('users/details',{userId:userId})
-    console.log(res)
+    const res = await client.post('users/friendrequestresponse',{userId:userId, friendId:friendId, choice:choice})
     return res.data
   }catch(error){
     throw error

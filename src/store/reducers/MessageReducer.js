@@ -1,4 +1,4 @@
-import { GET_USER_DETAILS, GET_MESSAGES, SET_DISPLAY_MESSAGE, SIGNUP,LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SET_SOCKET } from "../types";
+import { FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, GET_MESSAGES, SET_DISPLAY_MESSAGE, SIGNUP,LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SET_SOCKET } from "../types";
 
 const initialState = {
     logged:false,
@@ -20,14 +20,15 @@ const MessageReducer = (state = initialState, action) => {
             return { ...state, logged:false, loggedUser:null, currentRecipientSocket:''}
         case LOGIN:
             return { ...state, logged:action.payload.login, loggedUser:action.payload.user, displayMessage:action.payload.message }
-        case UPDATE_SOCKET_ID:
-            return { ...state, loggedUser:action.payload}
         case GET_SOCKET_FROM_NAME:
             return { ...state, currentRecipientSocket:action.payload}
         case SET_SOCKET:
             return { ...state, socket:action.payload}
+        case UPDATE_SOCKET_ID:
         case GET_USER_DETAILS:
-            return { ...state, loggedUser:action.payload}
+            return { ...state, loggedUser:action.payload,currentRecipientSocket:'' }
+        case FRIEND_REQUEST_RESPONSE:
+            return { ...state, loggedUser:action.payload.user}
         default: 
             return { ...state}
     }

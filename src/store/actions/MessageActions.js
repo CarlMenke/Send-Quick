@@ -1,5 +1,5 @@
-import { getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
-import { GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST } from "../types";
+import { getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
+import { FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST } from "../types";
 
 export const loadMessages = (userId) => {
     return async (dispatch) => {
@@ -118,9 +118,23 @@ export const loadUserDetails = (userId) => {
     return async (dispatch) => {
         try{
             const response = await getUserDetails(userId)
-            console.log('inside actions', response)
+            console.log(response)
             await dispatch({
                 type:GET_USER_DETAILS,
+                payload:response
+            })
+        }catch(error){
+            throw error
+        }
+    }   
+}
+
+export const loadFriendRequestResponse = (userId, friendId, choice) =>{
+    return async (dispatch) => {
+        try{
+            const response = await getFriendRequestResponse(userId, friendId, choice)
+            await dispatch({
+                type:FRIEND_REQUEST_RESPONSE,
                 payload:response
             })
         }catch(error){
