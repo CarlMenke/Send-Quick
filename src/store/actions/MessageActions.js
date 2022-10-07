@@ -4,7 +4,6 @@ import { NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET
 export const loadMessages = (primaryId, foreignId) => {
     return async (dispatch) => {
         try{
-            console.log('inside load messages')
             const messageArray = await getMessages(primaryId, foreignId)
             await dispatch({
                 type:GET_MESSAGES,
@@ -119,7 +118,6 @@ export const loadUserDetails = (userId) => {
     return async (dispatch) => {
         try{
             const response = await getUserDetails(userId)
-            console.log(response)
             await dispatch({
                 type:GET_USER_DETAILS,
                 payload:response
@@ -149,6 +147,18 @@ export const loadNewMessage = (content, primaryUser, foreignUser) => {
             await dispatch({
                 type:NEW_MESSAGE,
                 payload:response
+            })
+        }catch(error){
+            throw error
+        }
+    }
+}
+export const loadResetMessagesArray =  () => {
+    return async (dispatch) => {
+        try{
+            await dispatch({
+                type:GET_MESSAGES,
+                payload:[]
             })
         }catch(error){
             throw error

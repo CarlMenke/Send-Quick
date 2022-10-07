@@ -57,7 +57,6 @@ export const getSocketFromName = async (name) => {
 export const getUserDetails = async (userId) => {
   try{
     const res = await client.post('users/details',{userId:userId})
-    console.log(res.data)
     return res.data
   }catch(error){
     throw error
