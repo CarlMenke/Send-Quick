@@ -1,5 +1,5 @@
 import { connect } from "react-redux"
-import { useState, useEffect } from "react"
+import { useState, useEffect, useRef } from "react"
 import { loadNewMessage, loadMessages, loadUpdateSocketId, loadSocketFromName, loadUserDetails} from "../store/actions/MessageActions"
 
 
@@ -20,8 +20,8 @@ const mapStatetoProps = ({ state })  =>{
 const Chatbox = (props) =>{
     const { foreignUser, primaryUser } = props
     const { socket } = props.state
-
     const [message, setMessage] = useState('')
+    const messagesEndRef = useRef(null)
 
     useEffect(()=>{
         props.fetchMessagesByUsers(primaryUser.id, foreignUser.id)
@@ -30,10 +30,14 @@ const Chatbox = (props) =>{
         })
     },[socket])
 
+    useEffect(()=>{
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+    },[props.state.messageArray])
+
     const handleNewMessage = async (content, primaryUser, foreignUser,e) =>{
-        console.log(content, primaryUser, foreignUser)
         e.preventDefault()
         await props.fetchNewMessage(content, primaryUser, foreignUser)
+        await props.fetchMessagesByUsers(primaryUser.id, foreignUser.id)
         socket.emit('send reload', foreignUser.socket)
     }
 
@@ -47,6 +51,7 @@ const Chatbox = (props) =>{
                         <div className = {`chatbox-${message.config}`} key = {index}>{message.content}</div>
                     )
                 })}
+                <div ref={messagesEndRef}/>
             </div>
             <form onSubmit={(e) => {handleNewMessage(message, primaryUser, foreignUser,e)}}>
                 <input placeholder = "..." onChange = {(e)=>{setMessage(e.target.value)}}/>

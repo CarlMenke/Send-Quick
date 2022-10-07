@@ -74,13 +74,13 @@ const Conversations = (props) =>{
             <button type = 'submit'>Send Friend Request</button> 
          </form>
          <div>
-            {props.state.loggedUser.friendrequestrecieved.map((user,index) =>{
+            {props.state.loggedUser.friendrequestrecieved.map((user,index) => {
                return (
                   <div className = 'row-nowrap' key = {index}>
                      <div>Requst from {user.name}</div>
-                     <button onClick = { async ()=>{ await handleChoice(user,true)}}>✅
+                     <button onClick = { async ()=>{ await handleChoice(user,true) }}>✅
                         </button>
-                     <button onClick = { async ()=>{ await handleChoice(user,false)}}>❌
+                     <button onClick = { async ()=>{ await handleChoice(user,false) }}>❌
                         </button>
                   </div>
                )
