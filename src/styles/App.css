@@ -54,3 +54,30 @@
   padding:1%;
   margin:1%;
 }
+.chatbox-sent{
+  text-align:start;
+  align-self: end;
+  max-width:40%;
+  border-radius: 5%;
+  padding:3%;
+  margin:2%;
+  background-color:rgb(221, 221, 221);
+}
+.chatbox-recieved{
+  text-align:start;
+  align-self: start;
+  max-width:40%;
+  padding:3%;
+  margin:2%;
+  background-color:rgb(221, 221, 221);
+}
+.chatbox{
+  max-height:30vw;
+  overflow-y: scroll;
+  align-self:center;
+  width:60%;
+  display:flex;
+  flex-flow:column nowrap;
+  justify-content: space-between;
+  padding:5%;
+}

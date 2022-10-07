@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux"
 import { loadFriendRequestResponse, loadMessages, loadUpdateSocketId, loadSocketFromName, loadSendFriendRequest,loadUserDetails} from "../store/actions/MessageActions"
+import Chatbox from './Chatbox'
 
 const mapStatetoProps = ({ state })  =>{
    return { state }
@@ -8,36 +9,38 @@ const mapStatetoProps = ({ state })  =>{
 
 const mapDispatchToProps = (dispatch) =>{
    return{
-       fetchMessageByUser: (userId) => dispatch(loadMessages(userId)),
-       fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
-       fetchSocketFromName: (name) => dispatch(loadSocketFromName(name)),
-       fetchSendFriendRequest: (senderId,recieverName) => dispatch(loadSendFriendRequest(senderId,recieverName)),
+      fetchSendFriendRequest: (senderId,recieverName) => dispatch(loadSendFriendRequest(senderId,recieverName)),
+      fetchMessageByUser: (userId) => dispatch(loadMessages(userId)),
+      fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
+      fetchSocketFromName: (name) => dispatch(loadSocketFromName(name)),
        fetchUserDetails: (userId) => dispatch(loadUserDetails(userId)),
        fetchFriendRequestResponse: (userId, friendId, choice) => dispatch(loadFriendRequestResponse(userId, friendId, choice))
    }
 }
 
 const Conversations = (props) =>{
+   const { socket } = props.state
    const [currentMessage, setCurrentMessage] = useState('') 
    const [currentMessageRecipient, setCurrentMessageRecipient] = useState('') 
    const [currentFriendReqRecipient, setCurrentFriendReqRecipient] = useState('') 
+   const [primaryUser, setPrimaryUser] = useState('')
+   const [foreignUser, setForeignUser] = useState('')
+   const [openChat , setOpenChat] = useState(false)
    const [recievedMessage, setRecievedMessage] = useState('')
-   const { socket } = props.state
 
    useEffect(()=>{
       socket.on("recieve private message", (data) => {
          setRecievedMessage(data)
       })
       socket.on('recieve reload',() =>{
-         console.log('running recieve reload event')
          props.fetchUserDetails(props.state.loggedUser.id)
       })
-   },[socket])
-
-   useEffect(()=>{
       props.fetchUserDetails(props.state.loggedUser.id)
       socket.emit("send reload", props.state.currentRecipientSocket)
    },[socket])
+   useEffect(()=>{
+      socket.emit("send reload", props.state.currentRecipientSocket)
+   },[props.state.currentRecipientSocket])
 
    const sendPrivateMessage = async (e) => {
       e.preventDefault()
@@ -48,16 +51,20 @@ const Conversations = (props) =>{
       }
       socket.emit("send private message",data)
    }
-
    const sendFriendRequest = async (e) => {
       e.preventDefault()
       await props.fetchSendFriendRequest(props.state.loggedUser.id,currentFriendReqRecipient)
       await props.fetchSocketFromName(currentFriendReqRecipient)
       socket.emit("send reload", props.state.currentRecipientSocket)
    }
-   useEffect(()=>{
-      socket.emit("send reload", props.state.currentRecipientSocket)
-   },[props.state.currentRecipientSocket])
+   const handleChoice = async (user, choice) =>{
+      props.fetchFriendRequestResponse(
+         user.UserFriendRequests.userId,
+         user.UserFriendRequests.friendId,
+         choice)
+         await props.fetchSocketFromName(user.name)
+         await props.fetchUserDetails(props.state.loggedUser.id)
+   }
 
    return(
       <div>
@@ -71,22 +78,9 @@ const Conversations = (props) =>{
                return (
                   <div className = 'row-nowrap' key = {index}>
                      <div>Requst from {user.name}</div>
-                     <button onClick = { async ()=>{
-                        props.fetchFriendRequestResponse(
-                           user.UserFriendRequests.userId,
-                           user.UserFriendRequests.friendId,
-                           true)
-                           await props.fetchSocketFromName(user.name)
-                           await props.fetchUserDetails(props.state.loggedUser.id)
-                        }}>✅
+                     <button onClick = { async ()=>{ await handleChoice(user,true)}}>✅
                         </button>
-                     <button onClick = { async ()=>{props.fetchFriendRequestResponse(
-                           user.UserFriendRequests.userId,
-                           user.UserFriendRequests.friendId,
-                           false)
-                           await props.fetchSocketFromName(user.name)
-                           await props.fetchUserDetails(props.state.loggedUser.id)
-                           }}>❌
+                     <button onClick = { async ()=>{ await handleChoice(user,false)}}>❌
                         </button>
                   </div>
                )
@@ -103,11 +97,16 @@ const Conversations = (props) =>{
                return (
                      <div className = 'row-nowrap' key = {index}>
                         <div>{user.name}</div>
+                        <button onClick = { ()=>{ 
+                           setOpenChat(true)
+                           setForeignUser(user)
+                           setPrimaryUser(props.state.loggedUser)
+                           }}>Send Message</button>
                      </div>
                )
             })}
          </div>
-         <div>{recievedMessage}</div>
+         {openChat?<Chatbox primaryUser = {primaryUser} foreignUser = {foreignUser}/> :null}
       </div>
    )
 }

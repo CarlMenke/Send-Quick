@@ -1,13 +1,14 @@
-import { getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
-import { FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST } from "../types";
+import { getNewMessage, getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
+import { NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST } from "../types";
 
-export const loadMessages = (userId) => {
+export const loadMessages = (primaryId, foreignId) => {
     return async (dispatch) => {
         try{
-            const messages = await getMessages(userId)
+            console.log('inside load messages')
+            const messageArray = await getMessages(primaryId, foreignId)
             await dispatch({
                 type:GET_MESSAGES,
-                payload:messages
+                payload:messageArray
             })
         }catch (error){
             throw error
@@ -128,7 +129,6 @@ export const loadUserDetails = (userId) => {
         }
     }   
 }
-
 export const loadFriendRequestResponse = (userId, friendId, choice) =>{
     return async (dispatch) => {
         try{
@@ -141,6 +141,19 @@ export const loadFriendRequestResponse = (userId, friendId, choice) =>{
             throw error
         }
     }   
+}
+export const loadNewMessage = (content, primaryUser, foreignUser) => {
+    return async (dispatch) => {
+        try{
+            const response = await getNewMessage(content, primaryUser, foreignUser)
+            await dispatch({
+                type:NEW_MESSAGE,
+                payload:response
+            })
+        }catch(error){
+            throw error
+        }
+    }
 }
 
 

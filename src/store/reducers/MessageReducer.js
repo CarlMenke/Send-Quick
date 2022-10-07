@@ -5,13 +5,14 @@ const initialState = {
     loggedUser:null,
     displayMessage:'Login / Sign Up',
     currentRecipientSocket:'',
-    socket:null
+    socket:null,
+    messageArray:[]
 }
 
 const MessageReducer = (state = initialState, action) => {
     switch (action.type){
         case GET_MESSAGES:
-            return { ...state }
+            return { ...state , messageArray:action.payload }
         case SIGNUP:
             return { ...state, logged:action.payload.login, loggedUser:action.payload.user, displayMessage:action.payload.message }
         case SET_DISPLAY_MESSAGE:

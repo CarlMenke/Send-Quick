@@ -1,9 +1,18 @@
 import client from "./";
 
-export const getMessages = async (page) => {
+export const getMessages = async (primaryId, foreignId) => {
   try{
-    const res = await client.get(`localhost something`)
-    return res.data
+    const res = await client.post(`messages/conversation`, {primaryId:primaryId, foreignId:foreignId})
+    let {recievedMessages, sentMessages} = res.data
+    for(let i = 0; i < recievedMessages.length; i++){
+      recievedMessages[i].config = 'recieved'
+    }
+    for(let i = 0; i < sentMessages.length; i++){
+      sentMessages[i].config = 'sent'
+    }
+    let sendArray = [...sentMessages, ...recievedMessages]
+    sendArray.sort((a,b)=>{ return a.id - b.id })
+    return sendArray
   }catch(error){
     throw error
   }
@@ -48,6 +57,7 @@ export const getSocketFromName = async (name) => {
 export const getUserDetails = async (userId) => {
   try{
     const res = await client.post('users/details',{userId:userId})
+    console.log(res.data)
     return res.data
   }catch(error){
     throw error
@@ -64,6 +74,14 @@ export const getSendFriendRequest = async (senderId, recieverName) => {
 export const getFriendRequestResponse = async (userId, friendId, choice) => {
   try{
     const res = await client.post('users/friendrequestresponse',{userId:userId, friendId:friendId, choice:choice})
+    return res.data
+  }catch(error){
+    throw error
+  }
+}
+export const getNewMessage = async (content, primaryUser, foreignUser) =>{
+  try{
+    const res = await client.post('messages/create',{content:content, primaryUser:primaryUser, foreignUser:foreignUser})
     return res.data
   }catch(error){
     throw error
