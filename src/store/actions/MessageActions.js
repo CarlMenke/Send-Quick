@@ -1,5 +1,5 @@
 import { getNewMessage, getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
-import { NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST } from "../types";
+import { SET_TYPING, NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST, OPEN_CHAT } from "../types";
 
 export const loadMessages = (primaryId, foreignId) => {
     return async (dispatch) => {
@@ -14,6 +14,46 @@ export const loadMessages = (primaryId, foreignId) => {
         }
     }
 } 
+export const loadResetMessagesArray =  () => {
+    return async (dispatch) => {
+        try{
+            await dispatch({
+                type:GET_MESSAGES,
+                payload:[]
+            })
+        }catch(error){
+            throw error
+        }
+    }
+}
+export const loadTyping = (choice) => {
+    return async (dispatch) => {
+        try{
+            await dispatch({
+                type:SET_TYPING,
+                payload:choice
+            })
+        }catch (error){
+            throw error
+        }
+    }
+}
+export const loadOpenChat = (reciever,sender) =>{
+    return async (dispatch) => {
+        try{
+            const data = {
+                reciever:reciever,
+                sender:sender
+            }
+            await dispatch({
+                type:OPEN_CHAT,
+                payload:data
+            })
+        }catch (error){
+            throw error
+        }
+    }
+}
 export const loadUpdateSocketId = (name,socket) => {
     return async (dispatch) => {
         try{
@@ -105,6 +145,7 @@ export const loadSendFriendRequest = (senderId, recieverName) => {
     return async (dispatch) => {
         try{
             const response = await getSendFriendRequest(senderId, recieverName)
+            console.log(response)
             await dispatch({
                 type:SEND_FRIEND_REQUEST,
                 payload:response
@@ -131,6 +172,7 @@ export const loadFriendRequestResponse = (userId, friendId, choice) =>{
     return async (dispatch) => {
         try{
             const response = await getFriendRequestResponse(userId, friendId, choice)
+            console.log(response)
             await dispatch({
                 type:FRIEND_REQUEST_RESPONSE,
                 payload:response
@@ -153,17 +195,6 @@ export const loadNewMessage = (content, primaryUser, foreignUser) => {
         }
     }
 }
-export const loadResetMessagesArray =  () => {
-    return async (dispatch) => {
-        try{
-            await dispatch({
-                type:GET_MESSAGES,
-                payload:[]
-            })
-        }catch(error){
-            throw error
-        }
-    }
-}
+
 
 

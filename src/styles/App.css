@@ -81,3 +81,23 @@
   justify-content: space-between;
   padding:5%;
 }
+.typing-bubble-true{
+  animation-name: bubbleapprear;
+  animation-duration: .4s;
+  display:block;
+  width:15%;
+}
+.typing-bubble-false{
+  animation-name: bubbledisapprear;
+  animation-duration: .4s;
+  width:0%;
+}
+@keyframes bubbleapprear {
+  from {width:0%;}
+  to {width:15%;}
+}
+@keyframes bubbledisapprear {
+  from {width:15%;}
+  to {width:0%;}
+}
+

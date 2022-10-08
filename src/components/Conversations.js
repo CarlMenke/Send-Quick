@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux"
-import { loadResetMessagesArray, loadFriendRequestResponse, loadMessages, loadUpdateSocketId, loadSocketFromName, loadSendFriendRequest,loadUserDetails} from "../store/actions/MessageActions"
+import { loadOpenChat, loadFriendRequestResponse, loadMessages, loadUpdateSocketId, loadSocketFromName, loadSendFriendRequest,loadUserDetails} from "../store/actions/MessageActions"
 import Chatbox from './Chatbox'
 
 const mapStatetoProps = ({ state })  =>{
@@ -10,65 +10,62 @@ const mapStatetoProps = ({ state })  =>{
 const mapDispatchToProps = (dispatch) =>{
    return{
       fetchSendFriendRequest: (senderId,recieverName) => dispatch(loadSendFriendRequest(senderId,recieverName)),
-      fetchMessageByUser: (userId) => dispatch(loadMessages(userId)),
+      fetchSetMessageArray: (primaryId, foreignId) => dispatch(loadMessages(primaryId, foreignId)),
       fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
       fetchSocketFromName: (name) => dispatch(loadSocketFromName(name)),
       fetchUserDetails: (userId) => dispatch(loadUserDetails(userId)),
       fetchFriendRequestResponse: (userId, friendId, choice) => dispatch(loadFriendRequestResponse(userId, friendId, choice)),
-      fetchSetMessageArray: (primaryId, foreignId) => dispatch(loadMessages(primaryId, foreignId))
+      fetchOpenChat: (reciever,sender) => dispatch(loadOpenChat(reciever,sender))
    }
 }
 
 const Conversations = (props) =>{
-   const { socket } = props.state
-   const [currentMessage, setCurrentMessage] = useState('') 
-   const [currentMessageRecipient, setCurrentMessageRecipient] = useState('') 
+   const { socket, foreignUser, primaryUser } = props.state
    const [currentFriendReqRecipient, setCurrentFriendReqRecipient] = useState('') 
-   const [primaryUser, setPrimaryUser] = useState(null)
-   const [foreignUser, setForeignUser] = useState(null)
    const [openChat , setOpenChat] = useState(false)
-   const [recievedMessage, setRecievedMessage] = useState('')
+   const [requestSocket, setRequestSocket] = useState(null)
 
+   
    useEffect(()=>{
-      socket.on("recieve private message", (data) => {
-         setRecievedMessage(data)
-      })
-      socket.on('recieve reload',() =>{
+      socket.on('disconnect', ()=>{console.log('disconnected')})
+      socket.on('recieve reload',(data) =>{
          props.fetchUserDetails(props.state.loggedUser.id)
       })
-      props.fetchUserDetails(props.state.loggedUser.id)
-      socket.emit("send reload", props.state.currentRecipientSocket)
    },[socket])
-   useEffect(()=>{
-      socket.emit("send reload", props.state.currentRecipientSocket)
-   },[props.state.currentRecipientSocket])
+
    useEffect(()=>{
       if(primaryUser && foreignUser){
          props.fetchSetMessageArray(primaryUser.id, foreignUser.id)
       }
    },[primaryUser,foreignUser])
-   const sendPrivateMessage = async (e) => {
-      e.preventDefault()
-      await props.fetchSocketFromName(currentMessageRecipient)
-      const data = {
-         message:currentMessage,
-         recipientId:props.state.currentRecipientSocket
+
+   useEffect(()=>{
+      if(props.state.currentRecipientSocket){
+         console.log(props.state.currentRecipientSocket)
+         const data = {socket:props.state.currentRecipientSocket}
+         socket.emit('send reload', data)
       }
-      socket.emit("send private message",data)
-   }
+   },[props.state.currentRecipientSocket])
+
+
    const sendFriendRequest = async (e) => {
       e.preventDefault()
       await props.fetchSendFriendRequest(props.state.loggedUser.id,currentFriendReqRecipient)
       await props.fetchSocketFromName(currentFriendReqRecipient)
-      socket.emit("send reload", props.state.currentRecipientSocket)
    }
-   const handleChoice = async (user, choice) =>{
+
+   const handleChoice = async (user, choice) => {
       props.fetchFriendRequestResponse(
          user.UserFriendRequests.userId,
          user.UserFriendRequests.friendId,
          choice)
-         await props.fetchSocketFromName(user.name)
-         await props.fetchUserDetails(props.state.loggedUser.id)
+      await props.fetchSocketFromName(user.name)
+      await props.fetchUserDetails(props.state.loggedUser.id)
+   }
+
+   const handleOpenChatBox = async (reciever, sender) => {
+      setOpenChat(true)
+      props.fetchOpenChat(reciever, sender)
    }
 
    return(
@@ -91,27 +88,18 @@ const Conversations = (props) =>{
                )
             })}
          </div>
-         <form onSubmit = {(e) =>{sendPrivateMessage(e)}}>
-            <input onChange = {(e) => {setCurrentMessageRecipient(e.target.value)}} placeholder = "Friends's Name"/>
-            <input onChange = {(e) => {setCurrentMessage(e.target.value)}} placeholder = "Message..."/>
-            <button type = 'submit'>Send Message</button> 
-         </form>
          <div>
          <div>Your Friends</div>
             {props.state.loggedUser.friend.map((user,index) =>{
                return (
                      <div className = 'row-nowrap' key = {index}>
                         <div>{user.name}</div>
-                        <button onClick = { ()=>{ 
-                           setOpenChat(true)
-                           setForeignUser(user)
-                           setPrimaryUser(props.state.loggedUser)
-                           }}>Send Message</button>
+                        <button onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}}>Send Message</button>
                      </div>
                )
             })}
          </div>
-         {openChat?<Chatbox primaryUser = {primaryUser} foreignUser = {foreignUser}/> :null}
+         {openChat?<Chatbox/> :null}
       </div>
    )
 }
