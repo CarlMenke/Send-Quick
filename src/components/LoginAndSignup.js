@@ -2,6 +2,7 @@ import { useEffect, useState } from "react"
 import { connect } from "react-redux"
 import { loadSetSocket, loadSignup , loadSetDisplayMessage, loadLogout, loadLogin, loadUpdateSocketId} from "../store/actions/MessageActions"
 import io from 'socket.io-client'
+import dropdown from '../styles/login.png'
 
 const mapStatetoProps = ({state}) => {
     return {state}
@@ -37,6 +38,9 @@ const LoginAndSignup = (props) => {
         }
     },[props.state.logged])
     
+    return (
+        <img src = {dropdown} className='login-icon'/>
+    )
     if(!props.state.logged){
         if(hovered){
             return(
