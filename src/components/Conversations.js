@@ -24,6 +24,7 @@ const Conversations = (props) =>{
    const [currentFriendReqRecipient, setCurrentFriendReqRecipient] = useState('') 
    const [openChat , setOpenChat] = useState(false)
    const [requestSocket, setRequestSocket] = useState(null)
+   const [chatBox, setChatBox] = useState(false)
 
    
    useEffect(()=>{
@@ -69,37 +70,40 @@ const Conversations = (props) =>{
    }
 
    return(
-      <div>
-         <div>Chat</div>
-         <form onSubmit = {(e) =>{sendFriendRequest(e)}}>
-            <input onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "Recipient's Name"/>
-            <button type = 'submit'>Send Friend Request</button> 
-         </form>
-         <div>
-            {props.state.loggedUser.friendrequestrecieved.map((user,index) => {
-               return (
-                  <div className = 'row-nowrap' key = {index}>
-                     <div>Requst from {user.name}</div>
-                     <button onClick = { async ()=>{ await handleChoice(user,true) }}>✅
-                        </button>
-                     <button onClick = { async ()=>{ await handleChoice(user,false) }}>❌
-                        </button>
-                  </div>
-               )
-            })}
-         </div>
-         <div>
-         <div>Your Friends</div>
-            {props.state.loggedUser.friend.map((user,index) =>{
-               return (
+      <div className='dropdown'>
+         <div className={`conversations-container-${!chatBox}`}>
+            <div>
+            <div>Conversations</div>
+               {props.state.loggedUser.friend.map((user,index) =>{
+                  return (
+                        <div onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}}className = 'conversation-card' key = {index}>
+                           <div className = 'conversation-card-name'>{user.name}</div>
+                           <div className = 'conversation-card-message' >most recent message</div>
+                        </div>
+                  )
+               })}
+            </div>
+            <div>
+               {props.state.loggedUser.friendrequestrecieved.map((user,index) => {
+                  return (
                      <div className = 'row-nowrap' key = {index}>
-                        <div>{user.name}</div>
-                        <button onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}}>Send Message</button>
+                        <div>Requst from {user.name}</div>
+                        <button className="button"onClick = { async ()=>{ await handleChoice(user,true) }}>✅
+                           </button>
+                        <button className="button" onClick = { async ()=>{ await handleChoice(user,false) }}>❌
+                           </button>
                      </div>
-               )
-            })}
+                  )
+               })}
+            </div>
+            <form onSubmit = {(e) =>{sendFriendRequest(e)}}>
+               <input  className="input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "Recipient's Name"/>
+               <button className="button" type = 'submit'>Send Friend Request</button> 
+            </form>
          </div>
-         {openChat?<Chatbox/> :null}
+         <div>
+            {openChat?<Chatbox chatBox = {chatBox}/> :null}
+         </div>
       </div>
    )
 }

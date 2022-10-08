@@ -15,9 +15,9 @@ const Nav = () => {
             <div className="dropdown">
                 <img src = {dropdown} onClick ={()=>handleDropDown()} className = 'dropdown-icon'/>
                 <div className={`dropdown-content-${showMenu}`}>
-                    <Link className="nav-link" to="/">Home</Link>
-                    <Link className="nav-link" to="/conversations">Conversations</Link>
-                    <Link className="nav-link" >Games</Link>
+                    <Link onClick = {()=>handleDropDown()}className="nav-link" to="/">Home</Link>
+                    <Link  onClick = {()=>handleDropDown()} className="nav-link" to="/conversations">Conversations</Link>
+                    <Link  onClick = {()=>handleDropDown()} className="nav-link" >Games</Link>
                 </div>
             </div>
             <LoginAndSignup/>

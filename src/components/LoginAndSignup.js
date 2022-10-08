@@ -20,13 +20,16 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const LoginAndSignup = (props) => {
-    const [hovered, setHovered] = useState(false)
+    const [showMenu, setShowMenu] = useState(false)
     const [name, setName] = useState(null)
     const [password, setPassword] = useState(null)
 
+    const handleDropDown = () =>{
+        setShowMenu(!showMenu)
+    }
+
     useEffect (() => {
         if(props.state.logged){
-            setHovered(false)
             const socketHelper = async () => {
                 const socket = await io.connect("http://localhost:3002")
                 await socket.on("connect", () =>{
@@ -37,24 +40,19 @@ const LoginAndSignup = (props) => {
             socketHelper()
         }
     },[props.state.logged])
-    
-    return (
-        <img src = {dropdown} className='login-icon'/>
-    )
     if(!props.state.logged){
-        if(hovered){
-            return(
-                <div onMouseLeave={
-                    () => {
-                        setHovered(false)
-                        props.fetchSetDisplayMessage("Login / Sign Up")
-                    }}>
+        return(
+            <div className="dropdown">
+                <img src = {dropdown} className='login-icon' onClick = {()=>{handleDropDown()}}/>
+                <div className={`login-content-${showMenu}`}>
                     <div className = 'column-nowrap'>
                         <div>{props.state.displayMessage}</div>
-                        <input onChange={(e) => {setName(e.target.value)}} placeholder="Name..."/>
-                        <input onChange={(e) => {setPassword(e.target.value)}} placeholder="Password..."/>
+                        <input className='input' onChange={(e) => {setName(e.target.value)}} placeholder="Name..."/>
+                        <input className='input' onChange={(e) => {setPassword(e.target.value)}} placeholder="Password..."/>
                         <div>
-                            <button type = 'click' 
+                            <button 
+                                className="button"
+                                type = 'click' 
                                 onClick = {
                                     async () => {
                                         if(name !== '' && password !== ''){
@@ -63,7 +61,9 @@ const LoginAndSignup = (props) => {
                                 }}>
                                 Login
                             </button>
-                            <button type = 'click' 
+                            <button 
+                                className="button"
+                                type = 'click' 
                                 onClick = {
                                     async () => {
                                     await props.fetchSignup(name,password)
@@ -73,19 +73,14 @@ const LoginAndSignup = (props) => {
                         </div>
                     </div>
                 </div>
-            )
-        }else{
-            return(
-                <div onMouseEnter={() => {setHovered(true)}} >
-                    <div>{props.state.displayMessage}</div>
-                </div>
-            )
-        }
+            </div>
+        )
     }else{
         return(
             <div>
                 <div>{props.state.displayMessage}</div>
                 <button 
+                    className="button"
                     onClick = {async() => {
                         await props.fetchLogout()
                         await props.fetchSetDisplayMessage("Login / Sign Up")

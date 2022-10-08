@@ -20,7 +20,7 @@ function App(props){
     <div className="App">
       <Nav/>
       <Routes>
-        <Route path = "/" element={<Home/>}/>
+        <Route className='homepage' path = "/" element={<Home />}/>
         <Route 
           path = '/conversations'
           element={props.state.loggedUser && props.state.logged ? (

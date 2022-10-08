@@ -49,13 +49,12 @@
   background-color: rgb(231, 231, 231);
   border-radius: 0px 0px 5px 5px;
   box-shadow:0px 1px 5px rgb(0, 0, 0);
+  z-index: 2;
 }
 .column-nowrap{
   display:flex;
   flex-flow:column nowrap;
   justify-content: space-between;
-  padding:5%;
-  margin:10%;
 }
 .row-nowrap{
   display:flex;
@@ -112,18 +111,7 @@
   from {width:15%;}
   to {width:0%;}
 }
-@keyframes dropdownappear{
-  from {width:15%;}
-  to {width:0%;}
-}
-@keyframes dropdowndisappear{
-  to {top:-4vw;}
-  from {top:14vw;}
-}
-@keyframes dropdownappear{
-  to {top:14vw;}
-  from {top:-4vw;}
-}
+
 .nav-link{
   all: unset;
   color:rgb(0, 53, 53);
@@ -132,9 +120,14 @@
 .dropdown-icon{
   width:10vw;
 }
-.login-icon{
-  width:8.5%;
-  padding:1.5%;
+
+@keyframes dropdowndisappear{
+  to {top:-6vw;}
+  from {top:14vw;}
+}
+@keyframes dropdownappear{
+  to {top:14vw;}
+  from {top:-6vw;}
 }
 .dropdown-content-false{
   animation-name: dropdowndisappear;
@@ -143,7 +136,7 @@
   flex-flow:column nowrap;
   justify-content: center;
   align-items: start;
-  top:-4vw;
+  top:-6vw;
   animation-duration: .4s;
   z-index: -1;
   padding:2vw;
@@ -168,4 +161,130 @@
 }
 .dropdown{
   position: relative;
+}
+
+.login-icon{
+  justify-self:end;
+  width:70%;
+  padding:1.5%;
+}
+@keyframes loginndisappear{
+  to {top:-25vw;}
+  from {top:13.5vw;}
+}
+@keyframes loginappear{
+  to {top:13.5vw;}
+  from {top:-25vw;}
+}
+.login-content-false{
+  animation-name: loginndisappear;
+  position:absolute;
+  display:flex;
+  flex-flow:column nowrap;
+  justify-content: center;
+  align-items: start;
+  top:-25vw;
+  right:1vw;
+  animation-duration: .6s;
+  z-index: -1;
+  padding:2vw;
+  background-color: rgb(231, 231, 231);
+  border-radius: 0px 0px 5px 5px;
+  box-shadow:0px 1px 5px rgb(0, 0, 0);
+}
+.login-content-true{
+  position:absolute;
+  display:flex;
+  flex-flow:column nowrap;
+  justify-content: center;
+  align-items: start;
+  top:13.5vw;
+  right:1vw;
+  animation-name: loginappear;
+  animation-duration: .6s;
+  z-index: -1;
+  padding:2vw;
+  background-color: rgb(231, 231, 231);
+  border-radius: 0px 0px 5px 5px;
+  box-shadow:0px 1px 5px rgb(0, 0, 0);
+}
+
+.input{
+  border:none;
+  margin:2px;
+  border-radius:1vw;
+  padding: 1vw;
+  font-family: messages;
+}
+.button{
+  border:none;
+  margin:2px;
+  border-radius:1vw;
+  padding: 1vw;
+  font-family: messages;
+}
+
+.conversation-card{
+  align-self:center;
+  width:95%;
+  background-color: rgb(221, 221, 221);
+  margin:1vw;
+  padding: 1vw;
+  display:flex;
+  flex-flow:column nowrap;
+  justify-content: space-between;
+  align-items:start;
+  border-radius: 2vw;
+}
+.conversations-container{
+  display:flex;
+  flex-flow:column nowrap;
+  align-items: center;
+}
+.conversation-card-name{
+  padding:1.5vw;
+  padding-bottom:.75vw;
+}
+.conversation-card-message{
+  padding:1.5vw;
+  padding-top:.75vw;
+  color:grey;
+}
+
+@keyframes chatappear{
+  from {right:-100vw;}
+  to {right:0vw;}
+}
+@keyframes chatdisappear{
+  from {right:0vw;}
+  to {right:-100vw;}
+}
+.chatbox-contriner-true{
+  position:absolute;
+  right:0vw;
+  animation-name:chatappearp;
+  animation-duration: 1s;
+}
+.chatbox-contriner-false{
+  animation-name:chatdisappear;
+  animation-duration: 1s;
+}
+
+@keyframes conversationsappear{
+  from {left:-100vw;}
+  to {left:0vw;}
+}
+@keyframes conversationsdisappear{
+  from {left:0vw;}
+  to {left:-100vw;}
+}
+.conversations-contriner-true{
+  animation-name:conversationsappear;
+  animation-duration: 1s;
+  left:0vw; 
+}
+.conversations-contriner-false{
+  animation-name:conversationsdisappear;
+  animation-duration: 1s;
+  left:-100vw; 
 }

@@ -70,21 +70,23 @@ const Chatbox = (props) =>{
     }
 
     return (
-        <div className="column-nowrap">
-            <div>{props.state.foreignUser?props.state.foreignUser.name:null}</div>
-            <div className="chatbox">
-                {props.state.messageArray.map((message, index)=>{
-                    return(
-                        <div className = {`chatbox-${message.config}`} key = {index}>{message.content}</div>
-                    )
-                })}
-                <img className = {`typing-bubble-${props.state.typing}`} src={bubble} alt='...'/>
-                <div ref={messagesEndRef}/>
+        <div className = {`chatbox-container-${props.chatBox}`}>
+            <div className="column-nowrap">
+                <div>{props.state.foreignUser?props.state.foreignUser.name:null}</div>
+                <div className="chatbox">
+                    {props.state.messageArray.map((message, index)=>{
+                        return(
+                            <div className = {`chatbox-${message.config}`} key = {index}>{message.content}</div>
+                        )
+                    })}
+                    <img className = {`typing-bubble-${props.state.typing}`} src={bubble} alt='...'/>
+                    <div ref={messagesEndRef}/>
+                </div>
+                <form onSubmit={(e) => {handleNewMessage(message, primaryUser, foreignUser,e)}}>
+                    <input className="input" placeholder = "..." onChange = {(e)=>{handleMessageType(e)}}/>
+                    <button className="button" type = 'submit'>Send</button>
+                </form>
             </div>
-            <form onSubmit={(e) => {handleNewMessage(message, primaryUser, foreignUser,e)}}>
-                <input placeholder = "..." onChange = {(e)=>{handleMessageType(e)}}/>
-                <button type = 'submit'>Send</button>
-            </form>
         </div>
     )
 }
