@@ -48,7 +48,9 @@ const Conversations = (props) =>{
       }
    },[props.state.currentRecipientSocket])
 
-
+      useEffect(()  =>{
+         console.log(chatBox)
+   },[chatBox])
    const sendFriendRequest = async (e) => {
       e.preventDefault()
       await props.fetchSendFriendRequest(props.state.loggedUser.id,currentFriendReqRecipient)
@@ -66,43 +68,47 @@ const Conversations = (props) =>{
 
    const handleOpenChatBox = async (reciever, sender) => {
       setOpenChat(true)
+      setChatBox(!chatBox)
       props.fetchOpenChat(reciever, sender)
+      console.log(chatBox)
    }
 
    return(
-      <div className='dropdown'>
-         <div className={`conversations-container-${!chatBox}`}>
-            <div>
-            <div>Conversations</div>
-               {props.state.loggedUser.friend.map((user,index) =>{
-                  return (
-                        <div onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}}className = 'conversation-card' key = {index}>
-                           <div className = 'conversation-card-name'>{user.name}</div>
-                           <div className = 'conversation-card-message' >most recent message</div>
+      <div >
+         <div  className='dropdown'>
+            <div className={`conversations-container-${!chatBox}`}>
+               <div>
+               <div>Conversations</div>
+                  {props.state.loggedUser.friend.map((user,index) =>{
+                     return (
+                           <div onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}}className = 'conversation-card' key = {index}>
+                              <div className = 'conversation-card-name'>{user.name}</div>
+                              <div className = 'conversation-card-message' >most recent message</div>
+                           </div>
+                     )
+                  })}
+               </div>
+               <div>
+                  {props.state.loggedUser.friendrequestrecieved.map((user,index) => {
+                     return (
+                        <div className = 'row-nowrap' key = {index}>
+                           <div>Requst from {user.name}</div>
+                           <button className="button"onClick = { async ()=>{ await handleChoice(user,true) }}>✅
+                              </button>
+                           <button className="button" onClick = { async ()=>{ await handleChoice(user,false) }}>❌
+                              </button>
                         </div>
-                  )
-               })}
+                     )
+                  })}
+               </div>
+               <form onSubmit = {(e) =>{sendFriendRequest(e)}}>
+                  <input  className="input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "Recipient's Name"/>
+                  <button className="button" type = 'submit'>Send Friend Request</button> 
+               </form>
             </div>
-            <div>
-               {props.state.loggedUser.friendrequestrecieved.map((user,index) => {
-                  return (
-                     <div className = 'row-nowrap' key = {index}>
-                        <div>Requst from {user.name}</div>
-                        <button className="button"onClick = { async ()=>{ await handleChoice(user,true) }}>✅
-                           </button>
-                        <button className="button" onClick = { async ()=>{ await handleChoice(user,false) }}>❌
-                           </button>
-                     </div>
-                  )
-               })}
+            <div className = {`chatbox-container-${chatBox}`}>
+               {openChat?<Chatbox chatBox = {chatBox} setChatBox = {setChatBox}/> :null}
             </div>
-            <form onSubmit = {(e) =>{sendFriendRequest(e)}}>
-               <input  className="input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "Recipient's Name"/>
-               <button className="button" type = 'submit'>Send Friend Request</button> 
-            </form>
-         </div>
-         <div>
-            {openChat?<Chatbox chatBox = {chatBox}/> :null}
          </div>
       </div>
    )

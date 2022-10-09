@@ -71,6 +71,7 @@ const Chatbox = (props) =>{
 
     return (
         <div className = {`chatbox-container-${props.chatBox}`}>
+         <button onClick = {()=>{props.setChatBox(false)}}>Back</button>
             <div className="column-nowrap">
                 <div>{props.state.foreignUser?props.state.foreignUser.name:null}</div>
                 <div className="chatbox">
@@ -82,7 +83,7 @@ const Chatbox = (props) =>{
                     <img className = {`typing-bubble-${props.state.typing}`} src={bubble} alt='...'/>
                     <div ref={messagesEndRef}/>
                 </div>
-                <form onSubmit={(e) => {handleNewMessage(message, primaryUser, foreignUser,e)}}>
+                <form className='message-form'onSubmit={(e) => {handleNewMessage(message, primaryUser, foreignUser,e)}}>
                     <input className="input" placeholder = "..." onChange = {(e)=>{handleMessageType(e)}}/>
                     <button className="button" type = 'submit'>Send</button>
                 </form>

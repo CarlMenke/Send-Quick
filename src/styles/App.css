@@ -83,14 +83,14 @@
   font-family: messages;
 }
 .chatbox{
-  max-height:30vw;
+  position:initial;
+  height:100vw;
   overflow-y: scroll;
   align-self:center;
-  width:60%;
+  width:98vw;
   display:flex;
   flex-flow:column nowrap;
   justify-content: space-between;
-  padding:5%;
 }
 .typing-bubble-true{
   animation-name: bubbleapprear;
@@ -226,7 +226,7 @@
 
 .conversation-card{
   align-self:center;
-  width:95%;
+  width:95vw;
   background-color: rgb(221, 221, 221);
   margin:1vw;
   padding: 1vw;
@@ -259,15 +259,23 @@
   from {right:0vw;}
   to {right:-100vw;}
 }
-.chatbox-contriner-true{
+.chatbox-container-true{
   position:absolute;
   right:0vw;
-  animation-name:chatappearp;
-  animation-duration: 1s;
+  animation-name:chatappear;
+  animation-duration: .5s;
+  max-height:100px;
+  top:0px;
+  bottom:0px;
 }
-.chatbox-contriner-false{
+.chatbox-container-false{
+  position:absolute;
   animation-name:chatdisappear;
-  animation-duration: 1s;
+  animation-duration: .5s;
+  right:-100vw;
+  max-height:90vw;
+  top:0px;
+  bottom:0px;
 }
 
 @keyframes conversationsappear{
@@ -278,13 +286,16 @@
   from {left:0vw;}
   to {left:-100vw;}
 }
-.conversations-contriner-true{
+.conversations-container-true{
+  position:absolute;
   animation-name:conversationsappear;
-  animation-duration: 1s;
+  animation-duration: .5s;
   left:0vw; 
 }
-.conversations-contriner-false{
+.conversations-container-false{
+  position:absolute;
+  position: relative;
   animation-name:conversationsdisappear;
-  animation-duration: 1s;
+  animation-duration: .5s;
   left:-100vw; 
 }
