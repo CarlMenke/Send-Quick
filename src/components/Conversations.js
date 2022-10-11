@@ -60,7 +60,7 @@ const Conversations = (props) =>{
    }
 
    useEffect(()=>{
-      const socket = io.connect("https://sendfast.herokuapp.com:3002")
+      const socket = io.connect("https://sendfast.herokuapp.com")
       props.fetchSetSocket(socket)
    },[])
    useEffect (() => {
