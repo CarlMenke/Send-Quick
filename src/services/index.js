@@ -1,5 +1,5 @@
 import axios from "axios";
-const client = axios.create({baseURL:'http://localhost:3001/api/'})
+const client = axios.create({baseURL:'https://sendfast.herokuapp.com/api'})
 
 client.interceptors.request.use(
     config => {
