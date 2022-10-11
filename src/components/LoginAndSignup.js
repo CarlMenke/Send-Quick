@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom"
 import { connect } from "react-redux"
 import { loadSignup , loadSetDisplayMessage, loadLogout, loadLogin} from "../store/actions/MessageActions"
 import dropdown from '../styles/login.png'
+import account from '../styles/account.png'
 
 const mapStatetoProps = ({state}) => {
     return {state}
@@ -18,24 +19,21 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const LoginAndSignup = (props) => {
-    const [showMenu, setShowMenu] = useState(false)
+    const { showMenu , handleDropDown} = props
     const [name, setName] = useState(null)
     const [password, setPassword] = useState(null)
     const navigate = useNavigate()
 
-    const handleDropDown = () =>{
-        setShowMenu(!showMenu)
-    }
-
     useEffect(()=>{
         if(props.state.logged){
             navigate('/conversations')
+            handleDropDown()
         }
     },[props.state.logged])
+
     if(!props.state.logged){
         return(
-            <div className="dropdown">
-                <img src = {dropdown} className='login-icon' onClick = {()=>{handleDropDown()}}/>
+            <div >
                 <div className={`login-content-${showMenu}`}>
                     <div className = 'column-nowrap'>
                         <div className="display-message">{props.state.displayMessage}</div>
@@ -69,16 +67,19 @@ const LoginAndSignup = (props) => {
         )
     }else{
         return(
-            <div className="row-nowrap">
-                <div className="display-message">{props.state.displayMessage}</div>
-                <button 
-                    className="button"
-                    onClick = {async() => {
-                        await props.fetchLogout(props.state.loggedUser)
-                        await props.fetchSetDisplayMessage("Login / Sign Up")
-                    }}>
-                    Logout
-                </button>
+            <div className='login-card'>
+                <div className={`login-content-${showMenu}`}>
+                    <div className="display-message">{props.state.displayMessage}</div>
+                    <button 
+                        className="button"
+                        onClick = {async() => {
+                            await props.fetchLogout(props.state.loggedUser)
+                            await props.fetchSetDisplayMessage("Login / Sign Up")
+                            handleDropDown()
+                        }}>
+                        Logout
+                    </button>
+                </div>
             </div>
         )
     }

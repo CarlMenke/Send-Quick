@@ -4,6 +4,7 @@ import { setRecentMessagesArray, loadResetChatWith, loadOpenChat, loadSetSocket,
 import { getRecentMessage } from '../services/MessageServicves'
 import Chatbox from './Chatbox'
 import io from 'socket.io-client'
+import add from '../styles/add.png'
 
 const mapStatetoProps = ({ state })  =>{
    return { state }
@@ -65,7 +66,7 @@ const Conversations = (props) =>{
    },[])
    useEffect (() => {
       if(socket){
-      socket.on("connect", async () =>{
+      socket.on("connect", async () =>{ 
          console.log('socketid for this instance', socket.id)
          await props.fetchUpdateUserSocket(props.state.loggedUser.name,socket.id)
          await props.fetchSetSocket(socket)
@@ -83,7 +84,6 @@ const Conversations = (props) =>{
 
   useEffect(()=>{
    const helper = async () =>{
-      console.log('here')
       await props.fetchRecentMesagesArray(await getRecentMessageInline())
    }
    helper()
@@ -98,15 +98,15 @@ const Conversations = (props) =>{
                <div className ='conversations-list'>
                   {props.state.loggedUser.friend&&recentMessagesArray?props.state.loggedUser.friend.map((user,index) =>{
                      return (
-                           <div onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}}className = 'conversation-card' key = {index}>
+                           <div onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}} className = 'conversation-card' key = {index}>
                               <div className = 'conversation-card-name'>{user.name}</div>
                               <div className = 'conversation-card-message'>{recentMessagesArray[index]}</div>
                            </div>
                      )
-                  }):<div>in the else case</div>}
+                  }):null}
                <form className='add-friends' onSubmit = {(e) =>{sendFriendRequest(e)}}>
-                  <input  className="input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "Recipient's Name"/>
-                  <button className="add-friends-button" type = 'submit'>+</button> 
+                  <input  className="add-input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "   Add Friends"/>
+                  <img src = {add} className="add-friends-button" type = 'submit'/>
                </form>
                </div>
                </div>
@@ -114,7 +114,7 @@ const Conversations = (props) =>{
                   {props.state.loggedUser.friendrequestrecieved?props.state.loggedUser.friendrequestrecieved.map((user,index) => {
                      return (
                         <div className = 'row-nowrap' key = {index}>
-                           <div>Requst from {user.name}</div>
+                           <div>Requst from{user.name}</div>
                            <button className="button"onClick = { async ()=>{ await handleChoice(user,true) }}>✅
                               </button>
                            <button className="button" onClick = { async ()=>{ await handleChoice(user,false) }}>❌

@@ -18,7 +18,7 @@ const mapDispatchToProps = (dispatch) =>{
 function App(props){
   return (
     <div className="App">
-      <Nav/>
+      <Nav />
       <Routes>
         <Route className='homepage' path = "/" element={<Home />}/>
         <Route 

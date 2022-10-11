@@ -21,17 +21,17 @@ const mapStatetoProps = ({ state })  =>{
     }
  }
 const Chatbox = (props) =>{
-
+    const { socket , sendMessage, messageArray, typing, foreignUser, primaryUser, loggedUser} = props.state
     const [message, setMessage] = useState('')
     const messagesEndRef = useRef(null)
     const [typingHelper, setTypingHelper] = useState(false)
 
     useEffect(()=>{
-        props.state.socket.on("recieved message", async (data)=>{
+        socket.on("recieved message", async (data)=>{
             await props.fetchMessagesByUsers(data.recieverId, data.senderId)       
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })   
         })
-        props.state.socket.on('recieve typing start', async () => {
+        socket.on('recieve typing start', async () => {
             await props.fetchTyping(true)
             if(!typingHelper){  
                 messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
@@ -39,65 +39,64 @@ const Chatbox = (props) =>{
                 setTimeout(()=>{setTypingHelper(false)},2000)
             }
         })
-        props.state.socket.on('recieve typing end', async () => {
+        socket.on('recieve typing end', async () => {
             await props.fetchTyping(false)
         })
-    },[props.state.socket])
+    },[socket])
     useEffect(()=>{
-        props.state.socket.emit('send message', props.state.foreignUser.socket, props.state.primaryUser.name)
-    },[props.state.sendMessage])
+        socket.emit('send message', foreignUser.socket, primaryUser.name)
+    },[sendMessage])
     useEffect(()=>{
         if(message === ''){
-            props.state.socket.emit('send typing end',props.state.foreignUser.socket, props.state.primaryUser.name)
+            socket.emit('send typing end',foreignUser.socket, primaryUser.name)
         }
-        if(!props.state.typing){
+        if(!typing){
             if(message === ''){
-                props.state.socket.emit('send typing end',props.state.foreignUser.socket, props.state.primaryUser.name)
+                socket.emit('send typing end',foreignUser.socket, primaryUser.name)
             }
         }
     },[message])
     useEffect(()=>{
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })   
-    },[props.state.messageArray])
+        messageArray.length>0?messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }):console.log()
+    },[messageArray])
     const handleNewMessage = async (content, e) =>{
         e.preventDefault()
-        props.state.socket.emit('send typing end', props.state.foreignUser.socket, props.state.primaryUser.name)
-        await props.fetchSendMessage(content, props.state.primaryUser, props.state.foreignUser)
-        await props.fetchMessagesByUsers(props.state.primaryUser.id, props.state.foreignUser.id)
+        socket.emit('send typing end', foreignUser.socket, primaryUser.name)
+        await props.fetchSendMessage(content, primaryUser, foreignUser)
+        await props.fetchMessagesByUsers(primaryUser.id, foreignUser.id)
         e.target[0].value = ''
     }
     const handleMessageType = async (e) =>{
         setMessage(e.target.value)
-        if(!props.state.typing){
-            console.log(props.state.foreignUser.socket, props.state.primaryUser.name)
-            props.state.socket.emit('send typing start', props.state.foreignUser.socket, props.state.primaryUser.name)
+        if(!typing){
+            socket.emit('send typing start', foreignUser.socket, primaryUser.name)
         }
     }
     const handleBack = async () =>{
         await props.setChatBox(false)
-        await props.fetchCloseChat(props.state.loggedUser)
+        await props.fetchCloseChat(loggedUser)
     }
 
     return (
         <div className = {`chatbox-container-${props.chatBox}`}>
             <div className="name-back">
                 <img src ={back} onClick = {()=>{handleBack()}} className = 'back-icon'/>
-                <div className = "contact-name">{props.state.foreignUser?props.state.foreignUser.name:null}</div>
+                <div className = "contact-name">{foreignUser?foreignUser.name:null}</div>
             </div>
             <div className="chatbox">
-                {props.state.messageArray.map((message, index)=>{
+                {messageArray.map((message, index)=>{
                     return(
                         <div className = {`chatbox-${message.config}`} key = {index}>{message.content}</div>
                     )
                 })}
                 <div className="bubble-chat">
-                    <img className = {`typing-bubble-${props.state.typing}`} src={bubble} alt='...'/>
+                    <img className = {`typing-bubble-${typing}`} src={bubble} alt='...'/>
                 </div>
                 <div ref={messagesEndRef}/>
             </div>
             <form className='message-form' onSubmit={(e) => {handleNewMessage(message,e)}}>
                 <input className="message-input" placeholder = "..." onChange = {(e)=>{handleMessageType(e)}}/>
-                <button className="button" type = 'submit'>Send</button>
+                <button className="send" type = 'submit'>Send</button>
             </form>
         </div>
     )

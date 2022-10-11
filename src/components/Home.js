@@ -1,6 +1,6 @@
 const Home = () =>{
     return (
-        <div className='homepage'>HOME</div>
+        <div className='homepage'>Please Login or Signup to Continue.</div>
     )
 }
 
