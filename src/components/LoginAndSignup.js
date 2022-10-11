@@ -1,7 +1,6 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { connect } from "react-redux"
-import { loadSetSocket, loadSignup , loadSetDisplayMessage, loadLogout, loadLogin, loadUpdateSocketId} from "../store/actions/MessageActions"
-import io from 'socket.io-client'
+import { loadSignup , loadSetDisplayMessage, loadLogout, loadLogin} from "../store/actions/MessageActions"
 import dropdown from '../styles/login.png'
 
 const mapStatetoProps = ({state}) => {
@@ -12,10 +11,8 @@ const mapDispatchToProps = (dispatch) => {
     return{
         fetchSignup:(name,password) => dispatch(loadSignup(name,password)),
         fetchLogin:(name,password) => dispatch(loadLogin(name,password)),
-        fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
         fetchSetDisplayMessage:(message) => dispatch(loadSetDisplayMessage(message)),
-        fetchLogout:() => dispatch(loadLogout()),
-        fetchSetSocket:(socket) =>dispatch(loadSetSocket(socket))
+        fetchLogout:(user) => dispatch(loadLogout(user)),
     }
 }
 
@@ -28,18 +25,6 @@ const LoginAndSignup = (props) => {
         setShowMenu(!showMenu)
     }
 
-    useEffect (() => {
-        if(props.state.logged){
-            const socketHelper = async () => {
-                const socket = await io.connect("http://localhost:3002")
-                await socket.on("connect", () =>{
-                   props.fetchUpdateUserSocket(props.state.loggedUser.name,socket.id)
-                   props.fetchSetSocket(socket)
-                })
-            }
-            socketHelper()
-        }
-    },[props.state.logged])
     if(!props.state.logged){
         return(
             <div className="dropdown">
@@ -82,7 +67,7 @@ const LoginAndSignup = (props) => {
                 <button 
                     className="button"
                     onClick = {async() => {
-                        await props.fetchLogout()
+                        await props.fetchLogout(props.state.loggedUser)
                         await props.fetchSetDisplayMessage("Login / Sign Up")
                     }}>
                     Logout

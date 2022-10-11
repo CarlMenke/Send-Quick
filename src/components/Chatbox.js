@@ -1,6 +1,6 @@
 import { connect } from "react-redux"
 import { useState, useEffect, useRef } from "react"
-import { loadNewMessage, loadMessages,loadTyping,  loadUpdateSocketId, loadSocketFromName, loadUserDetails} from "../store/actions/MessageActions"
+import { loadSendMessage, loadNewMessage, loadMessages,loadTyping,  loadUpdateSocketId, loadSocketFromName, loadUserDetails, loadCloseChat} from "../store/actions/MessageActions"
 import bubble from '../styles/bubble.gif'
 
 const mapStatetoProps = ({ state })  =>{
@@ -9,69 +9,74 @@ const mapStatetoProps = ({ state })  =>{
  
  const mapDispatchToProps = (dispatch) =>{
     return{
-        fetchMessagesByUsers: (primaryId, foreignId) => dispatch(loadMessages(primaryId, foreignId)),
         fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
         fetchSocketFromName: (name) => dispatch(loadSocketFromName(name)),
         fetchUserDetails: (userId) => dispatch(loadUserDetails(userId)),
         fetchNewMessage: (content, primaryUser, foreignUser) => dispatch(loadNewMessage(content, primaryUser, foreignUser)),
-        fetchTyping: (choice) => dispatch(loadTyping(choice))
+        fetchMessagesByUsers: (primaryId, foreignId) => dispatch(loadMessages(primaryId, foreignId)),
+        fetchTyping: (choice) => dispatch(loadTyping(choice)),
+        fetchSendMessage: (content, primaryUser, foreignUser) => dispatch(loadSendMessage(content, primaryUser, foreignUser)),
+        fetchCloseChat: (sender) => dispatch(loadCloseChat(sender)),
     }
  }
 const Chatbox = (props) =>{
-    const { socket, foreignUser, primaryUser } = props.state
     const [message, setMessage] = useState('')
     const messagesEndRef = useRef(null)
+    
+    useEffect(()=>{
+        console.log('props.state.foreignuser in first useeffect', props.state.foreignUser?props.state.foreignUser.name:props.state.foreignUser)
+    },[props.state.foreignUser])
 
     useEffect(()=>{
-        socket.on("recieve reload", (data)=>{
-            console.log('props.state.primaryUser', props.state.primaryUser)
-            console.log('props.state.foreignUser', props.state.foreignUser)
-            //console.log('pre if check:', data.UserFriends.friendId, primaryUser.id , data.UserFriends.userId , foreignUser.id)
-            console.log('socket.io recieved data:',data)
-            //this if must compare the data's sender and check if it is the same as the currnent open chat box
-            if(data.UserFriends.friendId === primaryUser.id && data.UserFriends.userId === foreignUser.id){
-                console.log('inside if')
-                props.fetchMessagesByUsers(primaryUser.id, foreignUser.id)
-            }                   
+        props.state.socket.on("recieved message", async (data)=>{
+            await props.fetchMessagesByUsers(data.recieverId, data.senderId,)  
+            console.log(props.state.messageArray)            
         })
-        socket.on('recieve typing start', () => {
-            props.fetchTyping(true)
+        props.state.socket.on('recieve typing start', async () => {
+            await props.fetchTyping(true)
         })
-        socket.on('recieve typing end', () => {
-            props.fetchTyping(false)
+        props.state.socket.on('recieve typing end', async () => {
+            await props.fetchTyping(false)
         })
-    },[socket])
+    },[props.state.socket])
+
     useEffect(()=>{
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
-    },[props.state.messageArray])
+        if(props.state.foreignUser){
+            messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
+        }
+    },[props.state.messageArray, props.state.foreignUser])
+
     useEffect(()=>{
         if(message === ''){
-            socket.emit('send typing end', foreignUser.socket)
+            props.state.socket.emit('send typing end', props.state.foreignUser?props.state.foreignUser.socket:props.state.foreignUser)
         }
     },[message])
 
-    const handleNewMessage = async (content, primaryUser, foreignUser, e) =>{
+    useEffect(()=>{
+        props.state.socket.emit('send message', props.state.foreignUser.socket, props.state.primaryUser.name)
+    },[props.state.sendMessage])
+
+    const handleNewMessage = async (content, e) =>{
         e.preventDefault()
-        socket.emit('send typing end', foreignUser.socket)
-        await props.fetchNewMessage(content, primaryUser, foreignUser)
-        await props.fetchMessagesByUsers(primaryUser.id, foreignUser.id)
-        const data = {
-            reciever: foreignUser,
-            sender: primaryUser
-        }
-        socket.emit('send reload', foreignUser)
+        props.state.socket.emit('send typing end', props.state.foreignUser.socket)
+        await props.fetchSendMessage(content, props.state.primaryUser, props.state.foreignUser)
+        await props.fetchMessagesByUsers(props.state.primaryUser.id, props.state.foreignUser.id)
         e.target[0].value = ''
     }
     const handleMessageType = async (e) =>{
         setMessage(e.target.value)
         if(!props.state.typing){
-            socket.emit('send typing start', foreignUser.socket)
+            props.state.socket.emit('send typing start', props.state.foreignUser.socket)
         }
+    }
+    const handleBack = async () =>{
+        await props.setChatBox(false)
+        await props.fetchCloseChat(props.state.loggedUser)
     }
 
     return (
         <div className = {`chatbox-container-${props.chatBox}`}>
-         <button onClick = {()=>{props.setChatBox(false)}}>Back</button>
+         <button onClick = {()=>{handleBack()}}>Back</button>
             <div className="column-nowrap">
                 <div>{props.state.foreignUser?props.state.foreignUser.name:null}</div>
                 <div className="chatbox">
@@ -83,7 +88,7 @@ const Chatbox = (props) =>{
                     <img className = {`typing-bubble-${props.state.typing}`} src={bubble} alt='...'/>
                     <div ref={messagesEndRef}/>
                 </div>
-                <form className='message-form'onSubmit={(e) => {handleNewMessage(message, primaryUser, foreignUser,e)}}>
+                <form className='message-form' onSubmit={(e) => {handleNewMessage(message,e)}}>
                     <input className="input" placeholder = "..." onChange = {(e)=>{handleMessageType(e)}}/>
                     <button className="button" type = 'submit'>Send</button>
                 </form>

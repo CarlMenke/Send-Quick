@@ -1,5 +1,5 @@
-import { getNewMessage, getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
-import { SET_TYPING, NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST, OPEN_CHAT } from "../types";
+import { updateUserOpenChatWith, getNewMessage, getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
+import { CLOSE_CHAT, SET_TYPING, NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST, OPEN_CHAT, SEND_MESSAGE } from "../types";
 
 export const loadMessages = (primaryId, foreignId) => {
     return async (dispatch) => {
@@ -41,13 +41,28 @@ export const loadTyping = (choice) => {
 export const loadOpenChat = (reciever,sender) =>{
     return async (dispatch) => {
         try{
+            const messageArray = await getMessages(sender.id, reciever.id)
+            await updateUserOpenChatWith(sender.id, reciever.name)
             const data = {
-                reciever:reciever,
-                sender:sender
+                reciever: await getUserDetails(reciever.id),
+                sender: await getUserDetails(sender.id),
+                messageArray: messageArray
             }
             await dispatch({
                 type:OPEN_CHAT,
                 payload:data
+            })
+        }catch (error){
+            throw error
+        }
+    }
+}
+export const loadCloseChat = (sender) =>{
+    return async (dispatch) => {
+        try{
+            await updateUserOpenChatWith(sender.id, '')
+            await dispatch({
+                type:CLOSE_CHAT,
             })
         }catch (error){
             throw error
@@ -105,11 +120,24 @@ export const loadSetDisplayMessage = (message) => {
         }
     }
 }
-export const loadLogout = () => {
+export const loadLogout = (user) => {
     return async (dispatch) => {
+        await updateUserOpenChatWith(user.id, '')
         try{
             await dispatch({
                 type:LOGOUT,
+            })
+        }catch(error){
+            throw error
+        }
+    }
+}
+export const loadResetChatWith = (user) => {
+    return async (dispatch) => {
+        try{
+            const response = await updateUserOpenChatWith(user.id, '')
+            await dispatch({
+                
             })
         }catch(error){
             throw error
@@ -145,7 +173,6 @@ export const loadSendFriendRequest = (senderId, recieverName) => {
     return async (dispatch) => {
         try{
             const response = await getSendFriendRequest(senderId, recieverName)
-            console.log(response)
             await dispatch({
                 type:SEND_FRIEND_REQUEST,
                 payload:response
@@ -172,7 +199,6 @@ export const loadFriendRequestResponse = (userId, friendId, choice) =>{
     return async (dispatch) => {
         try{
             const response = await getFriendRequestResponse(userId, friendId, choice)
-            console.log(response)
             await dispatch({
                 type:FRIEND_REQUEST_RESPONSE,
                 payload:response
@@ -189,6 +215,23 @@ export const loadNewMessage = (content, primaryUser, foreignUser) => {
             await dispatch({
                 type:NEW_MESSAGE,
                 payload:response
+            })
+        }catch(error){
+            throw error
+        }
+    }
+}
+export const loadSendMessage = (content, primaryUser, foreignUser) => {
+    return async (dispatch) => {
+        try{
+            await getNewMessage(content, primaryUser, foreignUser)
+            const data = {
+                reciever: await getUserDetails(foreignUser.id),
+                sender: await getUserDetails(primaryUser.id)
+            }
+            await dispatch({
+                type:SEND_MESSAGE,
+                payload:data
             })
         }catch(error){
             throw error

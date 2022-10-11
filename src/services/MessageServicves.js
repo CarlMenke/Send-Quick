@@ -12,12 +12,15 @@ export const getMessages = async (primaryId, foreignId) => {
     }
     let sendArray = [...sentMessages, ...recievedMessages]
     sendArray.sort((a,b)=>{ return a.id - b.id })
-    return sendArray
+    let finalArray = []
+    for(let i = sendArray.length-100 ; i < sendArray.length; i++){
+      finalArray.push(sendArray[i])
+    }
+    return finalArray
   }catch(error){
     throw error
   }
 }
-
 export const getUpdateSocketId = async (name,socket) => {
   try{
     const res = await client.put('users/update/socket/id',{name:name, socket:socket})
@@ -26,7 +29,16 @@ export const getUpdateSocketId = async (name,socket) => {
     throw error
   }
 }
-
+export const updateUserOpenChatWith = async (userId, chatterName) => {
+  try{
+    console.log('here')
+    const res = await client.post('users/update/openchatwith', {userId:userId, chatterName:chatterName })
+    console.log(res.data)
+    return res.data
+  }catch(error){
+    throw error
+  }
+}
 export const signup = async (name, password) => {
   try{
     const res = await client.post('users/signup',{name:name, password:password})
@@ -36,7 +48,6 @@ export const signup = async (name, password) => {
     throw error
   }
 }
-
 export const login = async (name, password) => {
   try{
     const res = await client.post('users/login',{name:name, password:password})
