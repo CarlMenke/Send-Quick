@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { connect } from "react-redux"
-import { loadResetChatWith, loadOpenChat, loadSetSocket, loadFriendRequestResponse, loadMessages, loadUpdateSocketId, loadSocketFromName, loadSendFriendRequest,loadUserDetails} from "../store/actions/MessageActions"
+import { setRecentMessagesArray, loadResetChatWith, loadOpenChat, loadSetSocket, loadFriendRequestResponse, loadMessages, loadUpdateSocketId, loadSocketFromName, loadSendFriendRequest,loadUserDetails} from "../store/actions/MessageActions"
+import { getRecentMessage } from '../services/MessageServicves'
 import Chatbox from './Chatbox'
 import io from 'socket.io-client'
 
@@ -18,15 +19,45 @@ const mapDispatchToProps = (dispatch) =>{
       fetchOpenChat: (reciever,sender) => dispatch(loadOpenChat(reciever,sender)),
       fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
       fetchSetSocket: (socket) => dispatch((loadSetSocket(socket))),
-      fetchResetChatWith: (user) => dispatch((loadResetChatWith(user)))
+      fetchResetChatWith: (user) => dispatch((loadResetChatWith(user))),
+      fetchRecentMesagesArray: (array) => dispatch((setRecentMessagesArray(array)))
    }
 }
 
 const Conversations = (props) =>{
-   const { socket, foreignUser, primaryUser } = props.state
+   const { socket, foreignUser, primaryUser, recentMessagesArray, loggedUser } = props.state
    const [currentFriendReqRecipient, setCurrentFriendReqRecipient] = useState('') 
    const [openChat , setOpenChat] = useState(false)
    const [chatBox, setChatBox] = useState(false)
+
+   const sendFriendRequest = async (e) => {
+      e.preventDefault()
+      await props.fetchSendFriendRequest(props.state.loggedUser.id,currentFriendReqRecipient)
+      await props.fetchSetRecieverSocket(currentFriendReqRecipient)
+   }
+   const handleChoice = async (user, choice) => {
+      await props.fetchFriendRequestResponse(
+         user.UserFriendRequests.userId,
+         user.UserFriendRequests.friendId,
+         choice)
+      await props.fetchSetRecieverSocket(user.name)
+      await props.fetchUserDetails(props.state.loggedUser.id)
+   }
+   const handleOpenChatBox = async (reciever, sender) => {
+      await props.fetchOpenChat(reciever, sender)
+      setOpenChat(true)
+      setChatBox(!chatBox)
+   }
+   const getRecentMessageInline = async ()=>{
+      const array = []
+      for(let i = 0; i < await props.state.loggedUser.friend.length; i++){
+
+         const message = await getRecentMessage(props.state.loggedUser.friend[i],props.state.loggedUser)
+         console.log(message)
+         array.push(message.message?message.message.content:"")
+      }
+      return array
+   }
 
    useEffect(()=>{
       const socket = io.connect("http://localhost:3002")
@@ -50,40 +81,33 @@ const Conversations = (props) =>{
    }
   },[props.state.currentRecipientSocket])
 
-   const sendFriendRequest = async (e) => {
-      e.preventDefault()
-      await props.fetchSendFriendRequest(props.state.loggedUser.id,currentFriendReqRecipient)
-      await props.fetchSetRecieverSocket(currentFriendReqRecipient)
+  useEffect(()=>{
+   const helper = async () =>{
+      console.log('here')
+      await props.fetchRecentMesagesArray(await getRecentMessageInline())
    }
-   const handleChoice = async (user, choice) => {
-      await props.fetchFriendRequestResponse(
-         user.UserFriendRequests.userId,
-         user.UserFriendRequests.friendId,
-         choice)
-      await props.fetchSetRecieverSocket(user.name)
-      await props.fetchUserDetails(props.state.loggedUser.id)
-   }
-   const handleOpenChatBox = async (reciever, sender) => {
-      await props.fetchOpenChat(reciever, sender)
-      setOpenChat(true)
-      setChatBox(!chatBox)
-   }
+   helper()
+  },[loggedUser.friend])
 
    return(
       <div >
          <div  className='conversations'>
             <div className={`conversations-container-${!chatBox}`}>
                <div>
-               <div>Conversations</div>
+               <div className = 'your-conversations'>Your Contacts</div>
                <div className ='conversations-list'>
-                  {props.state.loggedUser.friend?props.state.loggedUser.friend.map((user,index) =>{
+                  {props.state.loggedUser.friend&&recentMessagesArray?props.state.loggedUser.friend.map((user,index) =>{
                      return (
                            <div onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}}className = 'conversation-card' key = {index}>
                               <div className = 'conversation-card-name'>{user.name}</div>
-                              <div className = 'conversation-card-message'>most recent message</div>
+                              <div className = 'conversation-card-message'>{recentMessagesArray[index]}</div>
                            </div>
                      )
-                  }):null}
+                  }):<div>in the else case</div>}
+               <form className='add-friends' onSubmit = {(e) =>{sendFriendRequest(e)}}>
+                  <input  className="input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "Recipient's Name"/>
+                  <button className="add-friends-button" type = 'submit'>+</button> 
+               </form>
                </div>
                </div>
                <div>
@@ -99,10 +123,6 @@ const Conversations = (props) =>{
                      )
                   }):null}
                </div>
-               <form className='add-friends' onSubmit = {(e) =>{sendFriendRequest(e)}}>
-                  <input  className="input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "Recipient's Name"/>
-                  <button className="add-friends-button" type = 'submit'>+</button> 
-               </form>
             </div>
             {openChat?<Chatbox chatBox = {chatBox} setChatBox = {setChatBox} foreignUser = {foreignUser} primaryUser = {primaryUser}/> :null}
          </div>

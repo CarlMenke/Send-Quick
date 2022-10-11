@@ -1,4 +1,5 @@
-import { useState } from "react"
+import { useEffect, useState} from "react"
+import { useNavigate } from "react-router-dom"
 import { connect } from "react-redux"
 import { loadSignup , loadSetDisplayMessage, loadLogout, loadLogin} from "../store/actions/MessageActions"
 import dropdown from '../styles/login.png'
@@ -20,11 +21,17 @@ const LoginAndSignup = (props) => {
     const [showMenu, setShowMenu] = useState(false)
     const [name, setName] = useState(null)
     const [password, setPassword] = useState(null)
+    const navigate = useNavigate()
 
     const handleDropDown = () =>{
         setShowMenu(!showMenu)
     }
 
+    useEffect(()=>{
+        if(props.state.logged){
+            navigate('/conversations')
+        }
+    },[props.state.logged])
     if(!props.state.logged){
         return(
             <div className="dropdown">

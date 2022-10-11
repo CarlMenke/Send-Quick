@@ -45,9 +45,9 @@
   justify-content: space-between;
   align-items: center;
   height:7vh;
-  background-color: rgb(231, 231, 231);
+  background-color: rgb(183, 199, 211);
   border-radius: 0px 0px 5px 5px;
-  box-shadow:0px 1px 5px rgb(0, 0, 0);
+  box-shadow:0px .75px 7px rgb(0, 0, 0);
   z-index: 2;
 }
 .column-nowrap{
@@ -87,7 +87,7 @@
   padding:3%;
   margin:2%;
   animation-duration:.2s;
-  background-color:rgb(221, 221, 221);
+  background-color:rgb(215, 226, 235);
   font-family: messages;
 }
 .chatbox-recieved{
@@ -96,20 +96,21 @@
   max-width:40%;
   padding:3%;
   margin:2%;
-  background-color:rgb(221, 221, 221);
+  background-color:rgb(215, 226, 235);
   font-family: messages;
+  border-radius:5px;
 }
 .chatbox{
   position:relative;
-  border:5px solid rgb(226, 226, 226);
+  border:5px solid rgb(183, 199, 211);
   background-color:rgb(255, 255, 255);
   border-radius: 10px;
   position:initial;
-  height:76vh;
+  height:79vh;
   overflow-y: scroll;
   align-self: center;
   justify-self: center;
-  width:96vw;
+  width:90vw;
   display:flex;
   flex-flow:column nowrap;
   justify-content: start;
@@ -261,11 +262,15 @@
   padding: 1vw;
   font-family: messages;
 }
-
+.your-conversations{
+  font-size:1.4em;
+  padding:1vh;
+  padding-top:2.4vh
+}
 .conversation-card{
   align-self:center;
-  width:88vw;
-  background-color: rgb(221, 221, 221);
+  width:90%;
+  background-color: rgb(221, 229, 235);
   margin-left:3vw;
   margin-right:3vw;
   margin-top:2vh;
@@ -289,7 +294,7 @@
 .conversation-card-message{
   padding:1.5vw;
   padding-top:.75vw;
-  color:grey;
+  color:rgb(142, 142, 142);
 }
 
 @keyframes chatappear{
@@ -302,6 +307,7 @@
 }
 .display-message{
   padding:5px;
+  font-size:1.3em;
 }
 .chatbox-container-true{
   position:absolute;
@@ -355,7 +361,7 @@
 }
 .conversations{
   position:relative;
-  height:93vh;
+  height:94.5vh;
   width:100vw;
   overflow-x:hidden;
   overflow-y:scroll
@@ -380,30 +386,58 @@
 }
 .message-form{
   position:absolute;
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: space-around;
+  align-items:center;
   bottom:2vh;
   height:5vh;
+  width:100%;
 }
 .conversations-list{
   background-color:white;
+  border:5px solid rgb(183, 199, 211);
   padding:10px;
   border-radius:20px;
   overflow-y:scroll;
   max-height:78vh;
+  margin:15px;
 }
 .add-friends{
+  background-color: rgb(221, 229, 235);
   display:flex;
+  padding:1vw;
   flex-flow: row nowrap;
-  justify-content: center;
+  justify-content: space-around;
+  align-self:center;
+  width:90%;
+  background-color: rgb(221, 229, 235);
+  margin-left:3vw;
+  margin-right:3vw;
+  margin-top:2vh;
+  margin-bottom:2vh;
+  padding-top: 2vh;
+  padding-bottom: 2vh;
+  border-radius: 2vw;
 }
 .add-friends-button{
-    border:none;
-    margin:2px;
-    border-radius:1vw;
-    padding: 1vw;
-    font-family: messages;
-    font-size:1.5em;
-    background-color:grey;
-    width:40px;
-    height:40px;
-    border-radius: 50%;
+  border:none;
+  margin-right:2vh;
+  border-radius:1vw;
+  padding: 1vw;
+  font-family: messages;
+  font-size:1.25em;
+  background-color:rgb(189, 189, 189);
+  width:30px;
+  height:30px;
+  border-radius: 50%;
+}
+.message-input{
+  border:2px solid rgb(183, 199, 211);
+  margin:2px;
+  border-radius:1vw;
+  padding: 2vw;
+  width:75%;
+  font-family: messages;
+  margin-left:2vw;
 }

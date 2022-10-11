@@ -1,4 +1,4 @@
-import { CLOSE_CHAT, SET_SOCKET, SEND_MESSAGE, SEND_FRIEND_REQUEST, OPEN_CHAT, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, GET_MESSAGES, SET_DISPLAY_MESSAGE, SIGNUP,LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SET_TYPING } from "../types";
+import { SET_RECENT_MESSAGES_ARRAY, CLOSE_CHAT, SET_SOCKET, SEND_MESSAGE, SEND_FRIEND_REQUEST, OPEN_CHAT, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, GET_MESSAGES, SET_DISPLAY_MESSAGE, SIGNUP,LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SET_TYPING } from "../types";
 
 const initialState = {
     logged:false,
@@ -10,7 +10,8 @@ const initialState = {
     typing:false,
     foreignUser:null,
     primaryUser:null,
-    sendMessage:false
+    sendMessage:false,
+    recentMessagesArray:[]
 }
 
 const MessageReducer = (state = initialState, action) => {
@@ -44,6 +45,9 @@ const MessageReducer = (state = initialState, action) => {
             return { ...state, foreignUser:null, primaryUser:null,  messageArray:[]}
         case SEND_MESSAGE:
             return { ...state, foreignUser:action.payload.reciever, primaryUser:action.payload.sender, sendMessage:!state.sendMessage}
+        case SET_RECENT_MESSAGES_ARRAY:
+            console.log(action.payload)
+            return { ...state, recentMessagesArray:action.payload}
         default: 
             return { ...state}
     }

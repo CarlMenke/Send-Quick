@@ -1,6 +1,31 @@
-import { updateUserOpenChatWith, getNewMessage, getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
-import { CLOSE_CHAT, SET_TYPING, NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST, OPEN_CHAT, SEND_MESSAGE } from "../types";
+import { getRecentMessage, updateUserOpenChatWith, getNewMessage, getFriendRequestResponse, getUserDetails, getUpdateSocketId, getMessages, signup, login, getSocketFromName, getSendFriendRequest } from "../../services/MessageServicves";
+import { SET_RECENT_MESSAGES_ARRAY, CLOSE_CHAT, SET_TYPING, NEW_MESSAGE, FRIEND_REQUEST_RESPONSE, GET_USER_DETAILS, SET_SOCKET, GET_MESSAGES, SIGNUP, SET_DISPLAY_MESSAGE, LOGOUT, LOGIN, UPDATE_SOCKET_ID,GET_SOCKET_FROM_NAME, SEND_FRIEND_REQUEST, OPEN_CHAT, SEND_MESSAGE } from "../types";
 
+export const loadRecentMessage = (user1,user2) => {
+    return async (dispatch) => {
+        try{
+            const messageArray = await getRecentMessage(user1,user2)
+            await dispatch({
+                type:GET_MESSAGES,
+                payload:messageArray
+            })
+        }catch (error){
+            throw error
+        }
+    }
+}
+export const setRecentMessagesArray = (array) =>{
+    return async (dispatch) => {
+        try{
+            await dispatch({
+                type:SET_RECENT_MESSAGES_ARRAY,
+                payload:array
+            })
+        }catch (error){
+            throw error
+        }
+    }
+}
 export const loadMessages = (primaryId, foreignId) => {
     return async (dispatch) => {
         try{

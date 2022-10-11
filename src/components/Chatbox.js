@@ -21,6 +21,7 @@ const mapStatetoProps = ({ state })  =>{
     }
  }
 const Chatbox = (props) =>{
+
     const [message, setMessage] = useState('')
     const messagesEndRef = useRef(null)
     const [typingHelper, setTypingHelper] = useState(false)
@@ -55,13 +56,14 @@ const Chatbox = (props) =>{
             }
         }
     },[message])
-
+    useEffect(()=>{
+        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })   
+    },[props.state.messageArray])
     const handleNewMessage = async (content, e) =>{
         e.preventDefault()
         props.state.socket.emit('send typing end', props.state.foreignUser.socket, props.state.primaryUser.name)
         await props.fetchSendMessage(content, props.state.primaryUser, props.state.foreignUser)
         await props.fetchMessagesByUsers(props.state.primaryUser.id, props.state.foreignUser.id)
-        messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })   
         e.target[0].value = ''
     }
     const handleMessageType = async (e) =>{
@@ -94,7 +96,7 @@ const Chatbox = (props) =>{
                 <div ref={messagesEndRef}/>
             </div>
             <form className='message-form' onSubmit={(e) => {handleNewMessage(message,e)}}>
-                <input className="input" placeholder = "..." onChange = {(e)=>{handleMessageType(e)}}/>
+                <input className="message-input" placeholder = "..." onChange = {(e)=>{handleMessageType(e)}}/>
                 <button className="button" type = 'submit'>Send</button>
             </form>
         </div>

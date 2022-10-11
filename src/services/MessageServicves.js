@@ -35,9 +35,7 @@ export const getUpdateSocketId = async (name,socket) => {
 }
 export const updateUserOpenChatWith = async (userId, chatterName) => {
   try{
-    console.log('here')
     const res = await client.post('users/update/openchatwith', {userId:userId, chatterName:chatterName })
-    console.log(res.data)
     return res.data
   }catch(error){
     throw error
@@ -96,6 +94,14 @@ export const getFriendRequestResponse = async (userId, friendId, choice) => {
 export const getNewMessage = async (content, primaryUser, foreignUser) =>{
   try{
     const res = await client.post('messages/create',{content:content, primaryUser:primaryUser, foreignUser:foreignUser})
+    return res.data
+  }catch(error){
+    throw error
+  }
+}
+export const getRecentMessage = async (user1, user2) =>{
+  try{
+    const res = await client.post('messages/getRecent',{user1:user1, user2:user2})
     return res.data
   }catch(error){
     throw error
