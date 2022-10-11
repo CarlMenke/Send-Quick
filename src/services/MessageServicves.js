@@ -12,11 +12,15 @@ export const getMessages = async (primaryId, foreignId) => {
     }
     let sendArray = [...sentMessages, ...recievedMessages]
     sendArray.sort((a,b)=>{ return a.id - b.id })
-    let finalArray = []
-    for(let i = sendArray.length-100 ; i < sendArray.length; i++){
-      finalArray.push(sendArray[i])
+
+    if(sendArray.length > 99){
+      let finalArray = []
+      for(let i = sendArray.length-100 ; i < sendArray.length; i++){
+        finalArray.push(sendArray[i])
+      }
+      return finalArray
     }
-    return finalArray
+    return sendArray
   }catch(error){
     throw error
   }

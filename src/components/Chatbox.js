@@ -22,43 +22,36 @@ const mapStatetoProps = ({ state })  =>{
 const Chatbox = (props) =>{
     const [message, setMessage] = useState('')
     const messagesEndRef = useRef(null)
-    
-    useEffect(()=>{
-        console.log('props.state.foreignuser in first useeffect', props.state.foreignUser?props.state.foreignUser.name:props.state.foreignUser)
-    },[props.state.foreignUser])
 
     useEffect(()=>{
         props.state.socket.on("recieved message", async (data)=>{
-            await props.fetchMessagesByUsers(data.recieverId, data.senderId,)  
-            console.log(props.state.messageArray)            
+            await props.fetchMessagesByUsers(data.recieverId, data.senderId,)          
         })
         props.state.socket.on('recieve typing start', async () => {
+            console.log()
             await props.fetchTyping(true)
         })
         props.state.socket.on('recieve typing end', async () => {
             await props.fetchTyping(false)
         })
     },[props.state.socket])
-
     useEffect(()=>{
         if(props.state.foreignUser){
             messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
         }
     },[props.state.messageArray, props.state.foreignUser])
-
     useEffect(()=>{
         if(message === ''){
-            props.state.socket.emit('send typing end', props.state.foreignUser?props.state.foreignUser.socket:props.state.foreignUser)
+            props.state.socket.emit('send typing end',props.state.foreignUser.socket, props.state.primaryUser.name)
         }
     },[message])
-
     useEffect(()=>{
         props.state.socket.emit('send message', props.state.foreignUser.socket, props.state.primaryUser.name)
     },[props.state.sendMessage])
 
     const handleNewMessage = async (content, e) =>{
         e.preventDefault()
-        props.state.socket.emit('send typing end', props.state.foreignUser.socket)
+        props.state.socket.emit('send typing end', props.state.foreignUser.socket, props.state.primaryUser.name)
         await props.fetchSendMessage(content, props.state.primaryUser, props.state.foreignUser)
         await props.fetchMessagesByUsers(props.state.primaryUser.id, props.state.foreignUser.id)
         e.target[0].value = ''
@@ -66,9 +59,17 @@ const Chatbox = (props) =>{
     const handleMessageType = async (e) =>{
         setMessage(e.target.value)
         if(!props.state.typing){
-            props.state.socket.emit('send typing start', props.state.foreignUser.socket)
+            console.log(props.state.foreignUser.socket, props.state.primaryUser.name)
+            props.state.socket.emit('send typing start', props.state.foreignUser.socket, props.state.primaryUser.name)
         }
     }
+    useEffect(()=>{
+        if(!props.state.typing){
+            if(message === ''){
+                props.state.socket.emit('send typing end',props.state.foreignUser.socket, props.state.primaryUser.name)
+            }
+        }
+    },[message])
     const handleBack = async () =>{
         await props.setChatBox(false)
         await props.fetchCloseChat(props.state.loggedUser)
