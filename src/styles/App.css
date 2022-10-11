@@ -1,3 +1,6 @@
+button {
+  background-color: rgb(226, 226, 226);
+}
 
 @media (max-width: 800px){
   .App {
@@ -484,14 +487,14 @@
     border:none;
     margin:2px;
     border-radius:1vw;
-    padding: 5px;
+    padding: 10px;
     font-family: messages;
     font-size:1.1em;
     color: rgb(47, 63, 76);
     box-shadow:0px 2px 10px  grey
   }
 }
-/*////////////////////////////^^^^^^^^^^^^^^^ USED FOR MOBILE ^^^^^^^^^^^^^^^^^^^^^^^^^^//////////////////*/
+
 @media (min-width: 800.001px){
 .App {
   text-align: center;
@@ -942,7 +945,7 @@ display:none
   border:none;
   margin:2px;
   border-radius:1vw;
-  padding: 5px;
+  padding: 10px;
   font-family: messages;
   font-size:1.1em;
   color: rgb(47, 63, 76);
