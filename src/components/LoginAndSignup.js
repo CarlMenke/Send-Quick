@@ -31,7 +31,7 @@ const LoginAndSignup = (props) => {
                 <img src = {dropdown} className='login-icon' onClick = {()=>{handleDropDown()}}/>
                 <div className={`login-content-${showMenu}`}>
                     <div className = 'column-nowrap'>
-                        <div>{props.state.displayMessage}</div>
+                        <div className="display-message">{props.state.displayMessage}</div>
                         <input className='input' onChange={(e) => {setName(e.target.value)}} placeholder="Name..."/>
                         <input className='input' onChange={(e) => {setPassword(e.target.value)}} placeholder="Password..."/>
                         <div>
@@ -62,8 +62,8 @@ const LoginAndSignup = (props) => {
         )
     }else{
         return(
-            <div>
-                <div>{props.state.displayMessage}</div>
+            <div className="row-nowrap">
+                <div className="display-message">{props.state.displayMessage}</div>
                 <button 
                     className="button"
                     onClick = {async() => {

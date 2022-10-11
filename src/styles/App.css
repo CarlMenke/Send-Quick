@@ -44,8 +44,7 @@
   flex-flow:row nowrap;
   justify-content: space-between;
   align-items: center;
-  padding:1%;
-  height:15vw;
+  height:7vh;
   background-color: rgb(231, 231, 231);
   border-radius: 0px 0px 5px 5px;
   box-shadow:0px 1px 5px rgb(0, 0, 0);
@@ -54,14 +53,31 @@
 .column-nowrap{
   display:flex;
   flex-flow:column nowrap;
-  justify-content: space-between;
+  justify-content: center;
+  align-content:center;
 }
 .row-nowrap{
   display:flex;
   flex-flow:row nowrap;
-  justify-content: center;
   padding:1%;
   margin:1%;
+}
+.name-back{
+  display:flex;
+  flex-flow:row nowrap;
+  justify-content: space-between;
+  width:100%;
+  padding:1%;
+  margin:1%;
+}
+
+@keyframes messageappear {
+  from {width:0%;}
+  to {width:15%;}
+}
+@keyframes messagedisappear {
+  from {width:15%;}
+  to {width:0%;}
 }
 .chatbox-sent{
   text-align:start;
@@ -70,6 +86,7 @@
   border-radius: 5%;
   padding:3%;
   margin:2%;
+  animation-duration:.2s;
   background-color:rgb(221, 221, 221);
   font-family: messages;
 }
@@ -83,51 +100,66 @@
   font-family: messages;
 }
 .chatbox{
+  position:relative;
+  border:5px solid rgb(226, 226, 226);
+  background-color:rgb(255, 255, 255);
+  border-radius: 10px;
   position:initial;
-  height:100vw;
+  height:76vh;
   overflow-y: scroll;
-  align-self:center;
-  width:98vw;
+  align-self: center;
+  justify-self: center;
+  width:96vw;
   display:flex;
   flex-flow:column nowrap;
-  justify-content: space-between;
+  justify-content: start;
 }
 .typing-bubble-true{
   animation-name: bubbleapprear;
-  animation-duration: .4s;
+  animation-duration: .3s;
   display:block;
-  width:15%;
+  width:30%;
+
+}
+.bubble-chat{
+  position:relative;
+  left:-10px;
 }
 .typing-bubble-false{
   animation-name: bubbledisapprear;
-  animation-duration: .4s;
+  animation-duration: .3s;
+  display:block;
   width:0%;
 }
 @keyframes bubbleapprear {
   from {width:0%;}
-  to {width:15%;}
+  to {width:30%;}
 }
 @keyframes bubbledisapprear {
-  from {width:15%;}
+  from {width:30%;}
   to {width:0%;}
 }
 
 .nav-link{
   all: unset;
-  color:rgb(0, 53, 53);
+  color:rgb(0, 0, 0);
   font-family: messages;
+  padding:1vw;
 }
 .dropdown-icon{
-  width:10vw;
+  position:absolute;
+  width:6vh;
+  left:1vw;
+  top:-3vh;
 }
 
 @keyframes dropdowndisappear{
-  to {top:-6vw;}
-  from {top:14vw;}
+  to {top:-20vh;}
+  from {top:3vh;}
 }
 @keyframes dropdownappear{
-  to {top:14vw;}
-  from {top:-6vw;}
+  to {top:3vh;}
+  from {top:-20vh;}
 }
 .dropdown-content-false{
   animation-name: dropdowndisappear;
@@ -136,10 +168,12 @@
   flex-flow:column nowrap;
   justify-content: center;
   align-items: start;
-  top:-6vw;
+  top:-20vh;
   animation-duration: .4s;
   z-index: -1;
-  padding:2vw;
+  left:1vw;
+  padding:2vh;
+  padding-top:3vh;
   background-color: rgb(231, 231, 231);
   border-radius: 0px 0px 5px 5px;
   box-shadow:0px 1px 5px rgb(0, 0, 0);
@@ -150,11 +184,13 @@
   flex-flow:column nowrap;
   justify-content: center;
   align-items: start;
-  top:14vw;
+  top:3vh;
   animation-name: dropdownappear;
   animation-duration: .4s;
   z-index: -1;
-  padding:2vw;
+  left:1vw;
+  padding:2vh;
+  padding-top:3vh;
   background-color: rgb(231, 231, 231);
   border-radius: 0px 0px 5px 5px;
   box-shadow:0px 1px 5px rgb(0, 0, 0);
@@ -169,12 +205,12 @@
   padding:1.5%;
 }
 @keyframes loginndisappear{
-  to {top:-25vw;}
-  from {top:13.5vw;}
+  to {top:-20vh;}
+  from {top:5vh;}
 }
 @keyframes loginappear{
-  to {top:13.5vw;}
-  from {top:-25vw;}
+  to {top:5vh;}
+  from {top:-20vh;}
 }
 .login-content-false{
   animation-name: loginndisappear;
@@ -183,11 +219,12 @@
   flex-flow:column nowrap;
   justify-content: center;
   align-items: start;
-  top:-25vw;
+  top:-20vh;
   right:1vw;
-  animation-duration: .6s;
+  animation-duration: .4s;
   z-index: -1;
-  padding:2vw;
+  padding:2vh;
+  padding-top:3vh;
   background-color: rgb(231, 231, 231);
   border-radius: 0px 0px 5px 5px;
   box-shadow:0px 1px 5px rgb(0, 0, 0);
@@ -198,12 +235,13 @@
   flex-flow:column nowrap;
   justify-content: center;
   align-items: start;
-  top:13.5vw;
+  top:5vh;
   right:1vw;
   animation-name: loginappear;
-  animation-duration: .6s;
+  animation-duration: .4s;
   z-index: -1;
-  padding:2vw;
+  padding:2vh;
+  padding-top:3vh;
   background-color: rgb(231, 231, 231);
   border-radius: 0px 0px 5px 5px;
   box-shadow:0px 1px 5px rgb(0, 0, 0);
@@ -226,9 +264,12 @@
 
 .conversation-card{
   align-self:center;
-  width:95vw;
+  width:88vw;
   background-color: rgb(221, 221, 221);
-  margin:1vw;
+  margin-left:3vw;
+  margin-right:3vw;
+  margin-top:2vh;
+  margin-bottom:2vh;
   padding: 1vw;
   display:flex;
   flex-flow:column nowrap;
@@ -259,23 +300,33 @@
   from {right:0vw;}
   to {right:-100vw;}
 }
+.display-message{
+  padding:5px;
+}
 .chatbox-container-true{
   position:absolute;
-  right:0vw;
   animation-name:chatappear;
   animation-duration: .5s;
-  max-height:100px;
+  height:93vh;
   top:0px;
   bottom:0px;
+  display:flex;
+  flex-flow:column nowrap;
+  align-items: center;
+  justify-items: center;
+  width:100%;
 }
 .chatbox-container-false{
   position:absolute;
   animation-name:chatdisappear;
   animation-duration: .5s;
   right:-100vw;
-  max-height:90vw;
+  height:100%;
   top:0px;
   bottom:0px;
+  display:flex;
+  flex-flow:column nowrap;
+  width:100%;
 }
 
 @keyframes conversationsappear{
@@ -291,6 +342,8 @@
   animation-name:conversationsappear;
   animation-duration: .5s;
   left:0vw; 
+  overflow-y:scroll;
+  width:100%;
 }
 .conversations-container-false{
   position:absolute;
@@ -298,4 +351,59 @@
   animation-name:conversationsdisappear;
   animation-duration: .5s;
   left:-100vw; 
+  overflow-y:scroll
+}
+.conversations{
+  position:relative;
+  height:93vh;
+  width:100vw;
+  overflow-x:hidden;
+  overflow-y:scroll
+}
+.back-icon{
+  width:10%;
+  max-width:30px;
+  justify-self:start;
+  padding-left:3vw;
+}
+.contact-name{
+  align-self:center;
+  justify-self:end;
+  font-size:1.5em;
+  padding-right:3vw;
+}
+.conversation-area{
+  display:flex;
+  flex-flow:column nowrap;
+  justify-content: center;
+  align-content:center;
+}
+.message-form{
+  position:absolute;
+  bottom:2vh;
+  height:5vh;
+}
+.conversations-list{
+  background-color:white;
+  padding:10px;
+  border-radius:20px;
+  overflow-y:scroll;
+  max-height:78vh;
+}
+.add-friends{
+  display:flex;
+  flex-flow: row nowrap;
+  justify-content: center;
+}
+.add-friends-button{
+    border:none;
+    margin:2px;
+    border-radius:1vw;
+    padding: 1vw;
+    font-family: messages;
+    font-size:1.5em;
+    background-color:grey;
+    width:40px;
+    height:40px;
+    border-radius: 50%;
 }
