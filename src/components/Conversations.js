@@ -32,6 +32,7 @@ const Conversations = (props) =>{
    const [chatBox, setChatBox] = useState(false)
 
    const sendFriendRequest = async (e) => {
+      console.log('inside friend request')
       e.preventDefault()
       await props.fetchSendFriendRequest(props.state.loggedUser.id,currentFriendReqRecipient)
       await props.fetchSetRecieverSocket(currentFriendReqRecipient)
@@ -54,11 +55,11 @@ const Conversations = (props) =>{
       for(let i = 0; i < await props.state.loggedUser.friend.length; i++){
 
          const message = await getRecentMessage(props.state.loggedUser.friend[i],props.state.loggedUser)
-         console.log(message)
          array.push(message.message?message.message.content:"")
       }
       return array
    }
+   const requestHelper = 
 
    useEffect(()=>{
       const socket = io.connect("https://sendfast.herokuapp.com")
@@ -105,8 +106,9 @@ const Conversations = (props) =>{
                      )
                   }):null}
                <form className='add-friends' onSubmit = {(e) =>{sendFriendRequest(e)}}>
-                  <input  className="add-input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "   Add Friends"/>
-                  <img src = {add} className="add-friends-button" type = 'submit'/>
+                  <input  className="add-input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "  Add Friends"/>
+                  <button className='add-input' type ='submit'>Send</button>
+                  <img  src = {add} className="add-friends-button" type = 'submit'/>
                </form>
                </div>
                </div>
