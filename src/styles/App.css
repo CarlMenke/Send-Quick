@@ -260,6 +260,7 @@
     border-radius:1vw;
     padding: 10px;
     font-family: messages;
+    background-color:#ECF0F1;
     color: rgb(47, 63, 76);
   }
   .your-conversations{
@@ -424,6 +425,7 @@
     margin-right:2vh;
     border-radius:2vw;
     padding: 1vw;
+    background-color:#ECF0F1;
     width:5vh;
     justify-self:end;
   }
@@ -753,6 +755,7 @@ display:none
   margin:2px;
   border-radius:1vw;
   padding: 10px;
+  background-color:#ECF0F1;
   font-family: messages;
   color: rgb(47, 63, 76);
 }
@@ -882,6 +885,7 @@ display:none
   border-radius:2vw;
   padding: 1vw;
   width:5vh;
+  background-color:#ECF0F1;
   justify-self:end;
 }
 .add-input{
