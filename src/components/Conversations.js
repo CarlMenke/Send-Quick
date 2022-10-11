@@ -5,6 +5,8 @@ import { getRecentMessage } from '../services/MessageServicves'
 import Chatbox from './Chatbox'
 import io from 'socket.io-client'
 import add from '../styles/add.png'
+import accept from '../styles/accept.png'
+import deny from '../styles/deny.png'
 
 const mapStatetoProps = ({ state })  =>{
    return { state }
@@ -105,25 +107,21 @@ const Conversations = (props) =>{
                            </div>
                      )
                   }):null}
+                  {props.state.loggedUser.friendrequestrecieved?props.state.loggedUser.friendrequestrecieved.map((user,index) => {
+                     return (
+                        <div className = 'request-card' key = {index}>
+                           <div>Requst from {user.name}</div>
+                           <img src={accept} className="options" onClick = { async ()=>{ await handleChoice(user,true) }}/>
+                           <img src={deny} className="options" onClick = { async ()=>{ await handleChoice(user,false) }}/>
+                        </div>
+                     )
+                  }):null}
                <form className='add-friends' onSubmit = {(e) =>{sendFriendRequest(e)}}>
                   <input  className="add-input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "  Add Friends"/>
                   <button className='add-input' type ='submit'>Send</button>
                   <img  src = {add} className="add-friends-button" type = 'submit'/>
                </form>
                </div>
-               </div>
-               <div>
-                  {props.state.loggedUser.friendrequestrecieved?props.state.loggedUser.friendrequestrecieved.map((user,index) => {
-                     return (
-                        <div className = 'row-nowrap' key = {index}>
-                           <div>Requst from{user.name}</div>
-                           <button className="button"onClick = { async ()=>{ await handleChoice(user,true) }}>✅
-                              </button>
-                           <button className="button" onClick = { async ()=>{ await handleChoice(user,false) }}>❌
-                              </button>
-                        </div>
-                     )
-                  }):null}
                </div>
             </div>
             {openChat?<Chatbox chatBox = {chatBox} setChatBox = {setChatBox} foreignUser = {foreignUser} primaryUser = {primaryUser}/> :null}
