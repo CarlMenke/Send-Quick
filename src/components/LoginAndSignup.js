@@ -80,7 +80,9 @@ const LoginAndSignup = (props) => {
                     </button>
                     <button onClick={
                         async ()=>{
-                            await deleteAccount(props.state.loggedUser)
+                            const user = {...props.state.loggedUser}
+                            await fetchLogOut(user)
+                            await deleteAccount(user)
                             await props.fetchSetDisplayMessage("Login / Sign Up")
                             handleDropDown()
                         }} className='button'>Delete Account</button>
