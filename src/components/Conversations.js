@@ -52,7 +52,7 @@ const Conversations = (props) =>{
    }
    const getRecentMessageInline = async ()=>{
       const array = []
-      for(let i = 0; i < await loggedUser.friend?loggedUser.friend.length:0; i++){
+      for(let i = 0; i < await loggedUser.friend.length; i++){
          const message = await getRecentMessage(loggedUser.friend[i],loggedUser)
          array.push(message.message?message.message.content:"")
       }
