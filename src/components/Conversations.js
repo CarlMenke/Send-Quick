@@ -27,7 +27,7 @@ const mapDispatchToProps = (dispatch) =>{
 }
 
 const Conversations = (props) =>{
-   const { socket, foreignUser, primaryUser, recentMessagesArray, loggedUser } = props.state
+   const { socket, foreignUser, primaryUser, recentMessagesArray, loggedUser,currentRecipientSocket } = props.state
    const [currentFriendReqRecipient, setCurrentFriendReqRecipient] = useState('') 
    const [openChat , setOpenChat] = useState(false)
    const [chatBox, setChatBox] = useState(false)
@@ -35,7 +35,7 @@ const Conversations = (props) =>{
    const sendFriendRequest = async (e) => {
       console.log('inside friend request')
       e.preventDefault()
-      await props.fetchSendFriendRequest(props.state.loggedUser.id,currentFriendReqRecipient)
+      await props.fetchSendFriendRequest(loggedUser.id,currentFriendReqRecipient)
       await props.fetchSetRecieverSocket(currentFriendReqRecipient)
    }
    const handleChoice = async (user, choice) => {
@@ -44,7 +44,7 @@ const Conversations = (props) =>{
          user.UserFriendRequests.friendId,
          choice)
       await props.fetchSetRecieverSocket(user.name)
-      await props.fetchUserDetails(props.state.loggedUser.id)
+      await props.fetchUserDetails(loggedUser.id)
    }
    const handleOpenChatBox = async (reciever, sender) => {
       await props.fetchOpenChat(reciever, sender)
@@ -53,14 +53,12 @@ const Conversations = (props) =>{
    }
    const getRecentMessageInline = async ()=>{
       const array = []
-      for(let i = 0; i < await props.state.loggedUser.friend.length; i++){
-
-         const message = await getRecentMessage(props.state.loggedUser.friend[i],props.state.loggedUser)
+      for(let i = 0; i < await loggedUser.friend?loggedUser.friend.length:0; i++){
+         const message = await getRecentMessage(loggedUser.friend[i],loggedUser)
          array.push(message.message?message.message.content:"")
       }
       return array
    }
-   const requestHelper = 
 
    useEffect(()=>{
       const socket = io.connect("https://sendfast.herokuapp.com")
@@ -70,19 +68,19 @@ const Conversations = (props) =>{
       if(socket){
       socket.on("connect", async () =>{ 
          console.log('socketid for this instance', socket.id)
-         await props.fetchUpdateUserSocket(props.state.loggedUser.name,socket.id)
+         await props.fetchUpdateUserSocket(loggedUser.name,socket.id)
          await props.fetchSetSocket(socket)
       })
       socket.on('recieve friend request', async ()=>{
-         await props.fetchUserDetails(props.state.loggedUser.id)
+         await props.fetchUserDetails(loggedUser.id)
       })
    }
   },[socket])
   useEffect(()=>{
-   if(props.state.currentRecipientSocket){
-      socket.emit('send friend request', props.state.currentRecipientSocket)
+   if(currentRecipientSocket){
+      socket.emit('send friend request', currentRecipientSocket)
    }
-  },[props.state.currentRecipientSocket])
+  },[currentRecipientSocket])
 
   useEffect(()=>{
    const helper = async () =>{
@@ -98,15 +96,15 @@ const Conversations = (props) =>{
                <div>
                <div className = 'your-conversations'>Your Contacts</div>
                <div className ='conversations-list'>
-                  {props.state.loggedUser.friend&&recentMessagesArray?props.state.loggedUser.friend.map((user,index) =>{
+                  {loggedUser.friend&&recentMessagesArray?loggedUser.friend.map((user,index) =>{
                      return (
-                           <div onClick = {()=>{handleOpenChatBox(user, props.state.loggedUser)}} className = 'conversation-card' key = {index}>
+                           <div onClick = {()=>{handleOpenChatBox(user, loggedUser)}} className = 'conversation-card' key = {index}>
                               <div className = 'conversation-card-name'>{user.name}</div>
                               <div className = 'conversation-card-message'>{recentMessagesArray[index]}</div>
                            </div>
                      )
                   }):null}
-                  {props.state.loggedUser.friendrequestrecieved?props.state.loggedUser.friendrequestrecieved.map((user,index) => {
+                  {loggedUser.friendrequestrecieved?loggedUser.friendrequestrecieved.map((user,index) => {
                      return (
                         <div className = 'request-card' key = {index}>
                            <div>Requst from {user.name}</div>
