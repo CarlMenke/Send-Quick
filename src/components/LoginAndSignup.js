@@ -2,8 +2,7 @@ import { useEffect, useState} from "react"
 import { useNavigate } from "react-router-dom"
 import { connect } from "react-redux"
 import { loadSignup , loadSetDisplayMessage, loadLogout, loadLogin} from "../store/actions/MessageActions"
-import dropdown from '../styles/login.png'
-import account from '../styles/account.png'
+import { deleteAccount } from "../services/MessageServicves"
 
 const mapStatetoProps = ({state}) => {
     return {state}
@@ -22,7 +21,9 @@ const LoginAndSignup = (props) => {
     const { showMenu , handleDropDown} = props
     const [name, setName] = useState(null)
     const [password, setPassword] = useState(null)
+    const [newName, setNewName] = useState(null)
     const navigate = useNavigate()
+
 
     useEffect(()=>{
         if(props.state.logged){
@@ -79,6 +80,13 @@ const LoginAndSignup = (props) => {
                         }}>
                         Logout
                     </button>
+                    <button onClick={
+                        async ()=>{
+                            await props.fetchLogout(props.state.loggedUser)
+                            await props.fetchSetDisplayMessage("Login / Sign Up")
+                            await deleteAccount(props.state.loggedUser)
+                            handleDropDown()
+                        }} className='button'>Delete Account</button>
                 </div>
             </div>
         )
