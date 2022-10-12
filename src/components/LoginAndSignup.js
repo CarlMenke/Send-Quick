@@ -7,7 +7,6 @@ import { deleteAccount } from "../services/MessageServicves"
 const mapStatetoProps = ({state}) => {
     return {state}
 }
- 
 const mapDispatchToProps = (dispatch) => {
     return{
         fetchSignup:(name,password) => dispatch(loadSignup(name,password)),
@@ -18,24 +17,25 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const LoginAndSignup = (props) => {
+    const {logged, displayMessage, loggedUser} = props.state
     const { showMenu , handleDropDown} = props
     const [name, setName] = useState(null)
     const [password, setPassword] = useState(null)
     const navigate = useNavigate()
 
     useEffect(()=>{
-        if(props.state.logged){
+        if(logged){
             navigate('/conversations')
             handleDropDown()
         }
-    },[props.state.logged])
+    },[logged])
 
-    if(!props.state.logged){
+    if(!logged){
         return(
             <div >
                 <div className={`login-content-${showMenu}`}>
                     <div className = 'column-nowrap'>
-                        <div className="display-message">{props.state.displayMessage}</div>
+                        <div className="display-message">{displayMessage}</div>
                         <input className='input' onChange={(e) => {setName(e.target.value)}} placeholder="Name..."/>
                         <input className='input' onChange={(e) => {setPassword(e.target.value)}} placeholder="Password..."/>
                         <div>
@@ -68,11 +68,11 @@ const LoginAndSignup = (props) => {
         return(
             <div className='login-card'>
                 <div className={`login-content-${showMenu}`}>
-                    <div className="display-message">{props.state.displayMessage}</div>
+                    <div className="display-message">{displayMessage}</div>
                     <button 
                         className="button"
                         onClick = {async() => {
-                            await props.fetchLogout(props.state.loggedUser)
+                            await props.fetchLogout(loggedUser)
                             await props.fetchSetDisplayMessage("Login / Sign Up")
                             handleDropDown()
                         }}>
@@ -80,7 +80,8 @@ const LoginAndSignup = (props) => {
                     </button>
                     <button onClick={
                         async ()=>{
-                            await deleteAccount(props.state.loggedUser)
+                            console.log(loggedUser)
+                            await deleteAccount(loggedUser.id)
                             await props.fetchSetDisplayMessage("Login / Sign Up")
                             handleDropDown()
                         }} className='button'>Delete Account</button>

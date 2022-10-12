@@ -107,9 +107,9 @@ export const getRecentMessage = async (user1, user2) =>{
     throw error
   }
 }
-export const deleteAccount = async (user) =>{
+export const deleteAccount = async (id) =>{
   try{
-    const res = await client.delete('users/delete',{user:user})
+    const res = await client.post('users/delete',{id:id})
     return res.data
   }catch(error){
     throw error
