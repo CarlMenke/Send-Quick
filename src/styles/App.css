@@ -488,7 +488,7 @@ button {
     flex-flow: row nowrap;
     justify-content: space-around;
     align-items:center;
-    bottom:0;
+    bottom:1vh;
     height:3vh;
     width:100%;
     color: rgb(70, 91, 109);
