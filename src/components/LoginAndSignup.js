@@ -21,9 +21,7 @@ const LoginAndSignup = (props) => {
     const { showMenu , handleDropDown} = props
     const [name, setName] = useState(null)
     const [password, setPassword] = useState(null)
-    const [newName, setNewName] = useState(null)
     const navigate = useNavigate()
-
 
     useEffect(()=>{
         if(props.state.logged){
@@ -82,9 +80,8 @@ const LoginAndSignup = (props) => {
                     </button>
                     <button onClick={
                         async ()=>{
-                            await props.fetchLogout(props.state.loggedUser)
-                            await props.fetchSetDisplayMessage("Login / Sign Up")
                             await deleteAccount(props.state.loggedUser)
+                            await props.fetchSetDisplayMessage("Login / Sign Up")
                             handleDropDown()
                         }} className='button'>Delete Account</button>
                 </div>
