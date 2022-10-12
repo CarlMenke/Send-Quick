@@ -11,7 +11,6 @@ import deny from '../styles/deny.png'
 const mapStatetoProps = ({ state })  =>{
    return { state }
 }
-
 const mapDispatchToProps = (dispatch) =>{
    return{
       fetchSendFriendRequest: (senderId,recieverName) => dispatch(loadSendFriendRequest(senderId,recieverName)),

@@ -8,7 +8,6 @@ import back from '../styles/back.png'
 const mapStatetoProps = ({ state })  =>{
     return { state }
  }
- 
  const mapDispatchToProps = (dispatch) =>{
     return{
         fetchUpdateUserSocket: (name,socket) => dispatch(loadUpdateSocketId(name,socket)),
@@ -21,6 +20,7 @@ const mapStatetoProps = ({ state })  =>{
         fetchCloseChat: (sender) => dispatch(loadCloseChat(sender)),
     }
  }
+
 const Chatbox = (props) =>{
     const { socket , sendMessage, messageArray, typing, foreignUser, primaryUser, loggedUser} = props.state
     const [message, setMessage] = useState('')
@@ -60,6 +60,7 @@ const Chatbox = (props) =>{
     useEffect(()=>{
         messageArray.length>0?messagesEndRef.current?.scrollIntoView({ behavior: "smooth" }):console.log()
     },[messageArray])
+
     const handleNewMessage = async (content, e) =>{
         e.preventDefault()
         socket.emit('send typing end', foreignUser.socket, primaryUser.name)
@@ -86,9 +87,7 @@ const Chatbox = (props) =>{
             </div>
             <div className="chatbox">
                 {messageArray.map((message, index)=>{
-                    return(
-                        <div className = {`chatbox-${message.config}`} key = {index}>{message.content}</div>
-                    )
+                    return(<div className = {`chatbox-${message.config}`} key = {index}>{message.content}</div>)
                 })}
                 <div className="bubble-chat">
                     <img className = {`typing-bubble-${typing}`} src={bubble} alt='...'/>
