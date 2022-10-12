@@ -33,7 +33,6 @@ const Conversations = (props) =>{
    const [chatBox, setChatBox] = useState(false)
 
    const sendFriendRequest = async (e) => {
-      console.log('inside friend request')
       e.preventDefault()
       await props.fetchSendFriendRequest(loggedUser.id,currentFriendReqRecipient)
       await props.fetchSetRecieverSocket(currentFriendReqRecipient)
@@ -81,7 +80,6 @@ const Conversations = (props) =>{
       socket.emit('send friend request', currentRecipientSocket)
    }
   },[currentRecipientSocket])
-
   useEffect(()=>{
    const helper = async () =>{
       await props.fetchRecentMesagesArray(await getRecentMessageInline())
@@ -93,7 +91,6 @@ const Conversations = (props) =>{
       <div >
          <div  className='conversations'>
             <div className={`conversations-container-${!chatBox}`}>
-               <div>
                <div className = 'your-conversations'>Your Contacts</div>
                <div className ='conversations-list'>
                   {loggedUser.friend&&recentMessagesArray?loggedUser.friend.map((user,index) =>{
@@ -116,9 +113,8 @@ const Conversations = (props) =>{
                <form className='add-friends' onSubmit = {(e) =>{sendFriendRequest(e)}}>
                   <input  className="add-input" onChange = {(e) => {setCurrentFriendReqRecipient(e.target.value)}} placeholder = "  Add Friends"/>
                   <button className='add-input' type ='submit'>Send</button>
-                  <img  src = {add} className="add-friends-button" type = 'submit'/>
+                  <img src = {add} className="add-friends-button" type = 'submit'/>
                </form>
-               </div>
                </div>
             </div>
             {openChat?<Chatbox chatBox = {chatBox} setChatBox = {setChatBox} foreignUser = {foreignUser} primaryUser = {primaryUser}/> :null}

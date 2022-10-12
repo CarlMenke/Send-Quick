@@ -16,7 +16,6 @@ const mapDispatchToProps = (dispatch) => {
 }
 
 const Nav = (props) => {
-
     const [showMenu1, setShowMenu1] = useState(false)
     const [showMenu2, setShowMenu2] = useState(false)
 

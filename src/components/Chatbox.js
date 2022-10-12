@@ -2,7 +2,6 @@ import { connect } from "react-redux"
 import { useState, useEffect, useRef } from "react"
 import { loadSendMessage, loadNewMessage, loadMessages,loadTyping,  loadUpdateSocketId, loadSocketFromName, loadUserDetails, loadCloseChat} from "../store/actions/MessageActions"
 import bubble from '../styles/bubble.gif'
-
 import back from '../styles/back.png'
 
 const mapStatetoProps = ({ state })  =>{

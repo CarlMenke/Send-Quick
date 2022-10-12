@@ -91,7 +91,7 @@ export const getFriendRequestResponse = async (userId, friendId, choice) => {
     throw error
   }
 }
-export const getNewMessage = async (content, primaryUser, foreignUser) =>{
+export const getNewMessage = async (content, primaryUser, foreignUser) => {
   try{
     const res = await client.post('messages/create',{content:content, primaryUser:primaryUser, foreignUser:foreignUser})
     return res.data
@@ -99,7 +99,7 @@ export const getNewMessage = async (content, primaryUser, foreignUser) =>{
     throw error
   }
 }
-export const getRecentMessage = async (user1, user2) =>{
+export const getRecentMessage = async (user1, user2) => {
   try{
     const res = await client.post('messages/getRecent',{user1:user1, user2:user2})
     return res.data
@@ -107,7 +107,7 @@ export const getRecentMessage = async (user1, user2) =>{
     throw error
   }
 }
-export const deleteAccount = async (id) =>{
+export const deleteAccount = async (id) => {
   try{
     console.log(id)
     const res = await client.delete(`users/delete/${id}`)

@@ -9,7 +9,6 @@ import Home from './components/Home'
 const mapStatetoProps = ({ state }) =>{
   return { state }
 }
-
 const mapDispatchToProps = (dispatch) =>{
   return{
   }

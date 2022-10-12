@@ -2,7 +2,6 @@ import { useEffect, useState} from "react"
 import { useNavigate } from "react-router-dom"
 import { connect } from "react-redux"
 import { loadSignup , loadSetDisplayMessage, loadLogout, loadLogin} from "../store/actions/MessageActions"
-import { deleteAccount } from "../services/MessageServicves"
 
 const mapStatetoProps = ({state}) => {
     return {state}
