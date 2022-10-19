@@ -1,4 +1,4 @@
-# **Quick Send Instant Messaging Applicationr**
+# **Quick Send Instant Messaging Application**
 
 ### Carl Menke
 
@@ -10,14 +10,14 @@
 
 ## **_Description_**
 
-This is a full CRUD browser-based instant messaging application in React.js, Redux, postgresSQL, Express.js, and Node.js which I coded two weeks after being introduced to these languages.
+This is a full CRUD browser-based instant messaging application in React Redux, postgreSQL, Express.js, and Node.js which I coded in 8 days two weeks after being introduced to these languages.
 
 ### **_Features_**
 
 Usilizing Socket.io this Application demonstrates many of the same features as the most popular messaging applications.
 
- - Instant messaging, the message you send will appear on your friends screen with out the need for them to refreahs the page.
- - Instant friend Request, When you send a friend request to a frind they will be prompted immediately weather or not they would liek to accept or  deny that request
+ - Instant messaging, the message you send will appear on your friends screen with out the need for them to refresh their page.
+ - Instant friend Request, When you send a friend request to a friend they will be prompted immediately with a choice to accept or deny that request.
  - Current typing, you will see a bubble if the friend you are messaging is typing.
  - View most recent messages, when viewing all of your contacts you can see the most recent and updated message they have sent to you.
 
