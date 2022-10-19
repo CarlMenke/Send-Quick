@@ -1,4 +1,4 @@
-# **Quick Send Instant Messaging Application**
+# **Send Quick Instant Messaging Application**
 
 ### Carl Menke
 
