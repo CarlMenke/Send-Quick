@@ -50,6 +50,7 @@ const Conversations = (props) => {
     loggedUser,
     currentRecipientSocket
   } = props.state;
+
   const [currentFriendReqRecipient, setCurrentFriendReqRecipient] =
     useState('');
   const [openChat, setOpenChat] = useState(false);
