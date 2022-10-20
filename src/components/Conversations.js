@@ -61,7 +61,7 @@ const Conversations = (props) =>{
 
    useEffect(()=>{
       const socket = io.connect("https://sendfast.herokuapp.com", {
-         withCredentials: true,
+         withCredentials: false,
          extraHeaders: {
            "Access-Control-Allow-Origin": "https://sendfast.herokuapp.com"
          }})
