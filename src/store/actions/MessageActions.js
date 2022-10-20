@@ -124,6 +124,7 @@ export const loadLogin = (name, password) => {
     return async (dispatch) => {
         try{
             const response = await login(name,password)
+            console.log(response)
             await dispatch({
                 type:LOGIN,
                 payload:response

@@ -7,8 +7,10 @@ client.interceptors.request.use(
         if(token){
             config.headers['authorization'] = `Bearer ${token}`
         }
-        config.headers["Access-Control-Allow-Origin"] = "*"
-        config.headers["Access-Control-Allow-Methods"] = "GET,PUT,POST,DELETE,PATCH,OPTIONS"
+        config.headers["Access-Control-Allow-Origin"] = ["*"]
+        config.headers["Access-Control-Allow-Methods"] = ["GET,PUT,POST,DELETE,PATCH,OPTIONS"]
+        config.headers["Access-Control-Allow-credentials"] = ["true"]
+        console.log(config)
         return config
     },
     (error) => {Promise.reject(error)}
