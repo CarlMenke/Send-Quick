@@ -6,7 +6,6 @@ import {
   loadOpenChat,
   loadSetSocket,
   loadFriendRequestResponse,
-  loadMessages,
   loadUpdateSocketId,
   loadSocketFromName,
   loadSendFriendRequest,
