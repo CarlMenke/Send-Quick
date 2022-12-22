@@ -88,12 +88,7 @@ const Conversations = (props) => {
   };
 
   useEffect(() => {
-    const socket = io.connect('https://sendfast.herokuapp.com', {
-      withCredentials: true,
-      extraHeaders: {
-        'Access-Control-Allow-Origin': 'https://sendfast.herokuapp.com'
-      }
-    });
+    const socket = io.connect('https://sendfast.herokuapp.com', {});
     props.fetchSetSocket(socket);
   }, []);
   useEffect(() => {
