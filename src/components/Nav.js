@@ -25,6 +25,7 @@ const Nav = (props) => {
     const handleDropDown2 = () =>{
         setShowMenu2(!showMenu2)
     }
+    
     return(
         <div>
             <div className="nav-bar">

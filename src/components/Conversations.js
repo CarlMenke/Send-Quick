@@ -51,8 +51,7 @@ const Conversations = (props) => {
     currentRecipientSocket
   } = props.state;
 
-  const [currentFriendReqRecipient, setCurrentFriendReqRecipient] =
-    useState('');
+  const [currentFriendReqRecipient, setCurrentFriendReqRecipient] = useState('');
   const [openChat, setOpenChat] = useState(false);
   const [chatBox, setChatBox] = useState(false);
 
@@ -80,7 +79,7 @@ const Conversations = (props) => {
   };
   const getRecentMessageInline = async () => {
     const array = [];
-    for (let i = 0; i < (await loggedUser.friend.length); i++) {
+    for (let i = 0; i < (await loggedUser.friend  ? loggedUser.friend.length : 0); i++) {
       const message = await getRecentMessage(loggedUser.friend[i], loggedUser);
       array.push(message.message ? message.message.content : '');
     }
